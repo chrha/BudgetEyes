@@ -1,0 +1,31 @@
+{% extends 'basepage.html' %}
+{% block content %}
+
+
+<div id='app'>
+<p>[[ title ]]</p>
+    <ul> 
+        <li v-for="elem in currency"> 
+            <h4> Currency: [[ elem[0] ]] - Value: [[ elem[1] ]] SEK </h4>  
+        </li>
+    </ul>
+</div>
+
+<script>
+const app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#app',
+  data: {
+    title: 'Welcome to the best budget app!',
+    currency : {{ currencies|safe }},
+  },
+  created () {
+      let a = {{ currencies|safe }};
+      for (var i = 0; i < a.length; i++){
+        console.log(a[i]);
+      }
+  }
+  
+});
+</script>
+{% endblock %}
