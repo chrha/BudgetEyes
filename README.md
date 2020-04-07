@@ -8,14 +8,34 @@ Core functions will be the provision of budget management so that the user can h
 We have also considered some form of communication between users so that tips and help can be shared.
 The website will also provide stock investment features as to when to buy or sell depending on strategies that the user chooses. 
 
+Currently the functionalities of this website are the following:
+
+*  Give a logged in user a good overview of his/her economy.
+*  Give an aesthetically pleasing yet easy to understand view of the stock market.
+*  Provide the user with tips on when to buy/sell using currently existing algorithms.
+*  Let logged in users discuss different strategies in a forum
+
 ## Technical specification
-The backend framework that the project will be built on is django. 
-We researched the differences between Flask and django and considering
-the scope of the project we felt that django would be a better fit, 
-django being a full-stack framework while flask being a lightweight library. 
-Django will not however be used for the frontend.
 
+### Backend
+The backend framework that the project will be built on is Django. 
+We researched the differences between Flask and Django and opted for Django due to several reasons:
+
+* Django comes with a lot of built in security measures, and since this app will handle sensitive data such as a users money security was deemed to be an important attribute. 
+* Unlike Flask, django allows developers to divide the project into multiple applications, thus making it easier to divide work between developers.  
+* Although the scope of the project isn't that big, which makes a better case for flask, the developers in this project had a desire to learn Django for future use.  
+
+To manage data we are initially going to use a sqlite database, but if the application moves from development to an actual product this may very well change. 
+Other options are then PostgreSQL, MariaDB or MySQL. Django supports all of these databases. Django also comes with a built in ORM which makes it easy to send queries to the
+database, and it also means that changing to another database will not require any change to our code. 
+
+
+### Frontend
 For the frontend we will be using Vue.js. We discussed the possibility of using React however we felt that Vue.js was more modular compared to react. 
-Vue is more of a library where you import the things that you need and react requires a whole environment to develop a react app.
+Vue is a lightweight library and thus takes very short time to load upon rendering pages compared to other frameworks. This gives a better user experience, 
+especially for users running the application on a less powerful machine like a phone. Vue still gives us the finctionality we desire, more specifically it 
+is very reactive, i.e it will automatically update data on a page when it changes. This will be relevant to our application since it will continously request
+stock data from external API:s, and this data must always be up to date on the webpage. Another reason for choosing Vue is the possibility to divide a page into 
+several different components. Since this application will be developed by three developers work can easier be divided; one developer can work on one component while another
+works on a second component. 
 
-To manage data we decided to use a sqlite database,  where our server communicates with it using an ORM  already available to us in django.
