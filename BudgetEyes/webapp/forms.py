@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate
 
 from django import forms
@@ -27,11 +27,17 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-  re_password = forms.CharField(max_length=32, label="Enter password again", widget=forms.PasswordInput)
+  firstname = forms.CharField(max_length=40, label="First name")
+  lastname = forms.CharField(max_length=40, label="Last name")
+  username = forms.CharField(max_length=40, label="Username")
+  email = forms.EmailField(max_length=20, label="Email")
+  password = forms.CharField(max_length=128, label="Pasword", widget=forms.PasswordInput) 
+  re_password = forms.CharField(max_length=128, label="Enter password again", widget=forms.PasswordInput)
 
-  class Meta:
-    model = User
-    fields = ['first_name', 'last_name', 'email', 'password', 're_password']
-    widgets = {
-      'password': forms.PasswordInput()
-    }
+  def clean(self):
+    super(RegisterForm, self).clean()
+    password = self.cleaned_data.get("password")
+    re_pass = self.cleaned_data.get("re_password")
+
+    if not password == re_pass:
+      self.add_error('re_password', "Passwords must match")

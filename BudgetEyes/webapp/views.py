@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.utils import IntegrityError
 import json
 
 
@@ -81,9 +83,25 @@ def sign_out(request):
 def sign_up(request):
     if request.method == "POST":
         form = RegisterForm(request.POST, auto_id=True)
-        if form.is_valid:
-            return redirect("login/")
+        if form.is_valid():
+            data = form.cleaned_data
+            fname = data.get("firstname")
+            lname = data.get("lastname")
+            email = data.get("email")
+            uname = data.get("username")
+            password = data.get("password")
+            try:
+                user = User.objects.create_user(username=uname, email=email, first_name=fname, last_name=lname, password=password)
+                user.save()
+            
+            except IntegrityError:
+                messages.error(request, "That username is already taken")
+
+            else:
+                messages.success(request, "User added!")
+                return redirect("/login")
         else:
-            messages.error(request, "Not valid form")
-    
+            messages.error(request, "Form not validated")
+    else:
+        form = RegisterForm(auto_id=True)
     return render(request, "signup.html", {"form" : form})
