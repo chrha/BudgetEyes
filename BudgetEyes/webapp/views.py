@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth import authenticate, login 
+from django.contrib.auth.decorators import login_required
 import json
 
 
@@ -14,7 +16,7 @@ from .models import Currency
 def index(request):
     return redirect("/example")
 
-
+@login_required
 def example(request):
 
     if request.method == "POST":
@@ -48,17 +50,23 @@ def example(request):
 
         return render(request, 'example.html', {"form":form, "currencies" : currdict})
 
-def login(request):
-    form = LoginForm(request.POST, auto_id=True)
-
+def sign_in(request):
     if request.method == "POST":
+        form = LoginForm(request.POST, auto_id=True)
         if form.is_valid():
             print("Got post")
             data = form.cleaned_data
             print(data)
-            messages.success(request, 'Post received')
-        else:
-            error_msg = form.errors.get("__all__")[0]
-            messages.error(request, error_msg)
+            username = data.get("username")
+            password = data.get("password")
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect("/example/")
+            else:
+                error_msg = "No user with those credentials"
+                messages.error(request, error_msg)
+    else:
+        form = LoginForm(auto_id=True)
 
     return render(request, 'login.html', {"form" : form})

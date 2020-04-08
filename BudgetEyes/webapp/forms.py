@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
   required_css_class = 'required'
   username = forms.CharField(max_length=30)
   password = forms.CharField(max_length=32, widget=forms.PasswordInput)
-
+"""
   def clean(self):
     super(LoginForm, self).clean()
 
@@ -23,4 +23,4 @@ class LoginForm(forms.Form):
     
     if not user:
       raise forms.ValidationError("No user with those credentials")
-    
+"""    
