@@ -22,60 +22,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-  </head>
+    <title>Sign up</title>
+    </head>
+
+
+
 
   <body>
 
-  <div id='login'>
-    <b-container class="login-container">
+  <div id="signup">
+    <b-container class="signup-container">
       <b-row class="mt-5">
         <b-col> </b-col>
         <b-col cols="8">
-          <form action="/login/" method="post">
+          <form id="frm" action="/signup/" method="post">
             {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Log in">
+            Firstname: {{ form.firstname }} <br/>
+            Lastname : {{ form.lastname }} <br/>
+            Username : {{ form.username }} <br/>
+            Email : {{ form.email }} <br/>
+            Password: {{ form.password }} <br/>
+            Enter password again: {{ form.re_password }} <br/>
+            <input type="submit" value="Sign up">
           </form>
         </b-col>
         <b-col> </b-col>
       </b-row>
 
-      <b-row class="mt 4">
+      <b-row class="mt-5" id="messages">
         <b-col> </b-col>
-        <b-col cols="4">
-          {% include "messages.html" %}
-        </b-col>
+        <b-col cols="6"> {% include "messages.html" %} </b-col>
         <b-col> </b-col>
       </b-row>
-
-  
-
-      <b-row class mt-4>
-      <b-col> </b-col>
-      <b-col cols="4">
-        <a href="/signup"> Not registred? Sign up here </a>
-      </b-col>
-      <b-col> </b-col>
-
-      </b-row>
-    </b-container>
-
-
   </div>
-
-
-
 
 
   <script>
 
   const app = new Vue({
-    el : "#login"
-  });
-  
-  </script>
+    el : "#signup"
+  })
 
+  </script>
+  <style>
+    #frm
+    {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 14px; 
+    }
+  </style>
   </body>
+
 
 </html>
