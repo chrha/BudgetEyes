@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 import json
 
 
-from .forms import CurrencyForm
+from .forms import CurrencyForm, LoginForm
 from .models import Currency
 
 
@@ -46,3 +47,18 @@ def example(request):
         currdict = {k:v for (k,v) in [(x.name, x.value) for x in currencies]}
 
         return render(request, 'example.html', {"form":form, "currencies" : currdict})
+
+def login(request):
+    form = LoginForm(request.POST, auto_id=True)
+
+    if request.method == "POST":
+        if form.is_valid():
+            print("Got post")
+            data = form.cleaned_data
+            print(data)
+            messages.success(request, 'Post received')
+        else:
+            error_msg = form.errors.get("__all__")[0]
+            messages.error(request, error_msg)
+
+    return render(request, 'login.html', {"form" : form})

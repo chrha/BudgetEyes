@@ -4,25 +4,26 @@
 
 <div id='app'>
 
-    <b-container class="list-container">
-      <b-row class="center-this">
-        <b-col> </b-col>
-        <b-col cols="8">
-          <H1>[[ title ]]</H1>
-          <ul> 
-              <li v-for="(value, name) in currency"> 
-                  <h4> Currency: [[ name ]] - Value: [[ value ]] SEK </h4>
-              </li>
-          </ul>
-            <form @submit.prevent="test">
-              {% csrf_token %}
-              {{ form }}
-              <input type="submit" value="Submit">
-           </form>
-        </b-col>
-        <b-col> </b-col>
-      </b-row>
-    </b-container>
+
+  <b-container class="list-container">
+    <b-row class="center-this">
+      <b-col> </b-col>
+      <b-col cols="8">
+        <H1>[[ title ]]</H1>
+        <ul> 
+            <li v-for="(value, name) in currency"> 
+                <h4> Currency: [[ name ]] - Value: [[ value ]] SEK </h4>
+            </li>
+        </ul>
+          <form @submit.prevent="test">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+          </form>
+      </b-col>
+      <b-col> </b-col>
+    </b-row>
+  </b-container>
 
 </div>
 
