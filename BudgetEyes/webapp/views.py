@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import json
 
 
-from .forms import CurrencyForm, LoginForm
+from .forms import CurrencyForm, LoginForm, RegisterForm
 from .models import Currency
 
 
@@ -70,3 +70,20 @@ def sign_in(request):
         form = LoginForm(auto_id=True)
 
     return render(request, 'login.html', {"form" : form})
+
+@login_required
+def sign_out(request):
+    if request.method == "GET":
+        logout(request)
+        return redirect("/login")
+
+
+def sign_up(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST, auto_id=True)
+        if form.is_valid:
+            return redirect("login/")
+        else:
+            messages.error(request, "Not valid form")
+    
+    return render(request, "signup.html", {"form" : form})

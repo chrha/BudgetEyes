@@ -24,3 +24,14 @@ class LoginForm(forms.Form):
     if not user:
       raise forms.ValidationError("No user with those credentials")
 """    
+
+
+class RegisterForm(forms.Form):
+  re_password = forms.CharField(max_length=32, label="Enter password again", widget=forms.PasswordInput)
+
+  class Meta:
+    model = User
+    fields = ['first_name', 'last_name', 'email', 'password', 're_password']
+    widgets = {
+      'password': forms.PasswordInput()
+    }
