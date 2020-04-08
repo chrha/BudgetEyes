@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import json
 
@@ -11,10 +11,14 @@ from .models import Currency
 
 
 def index(request):
+    return redirect("/example")
+
+
+def example(request):
 
     if request.method == "POST":
         print("Post")
-        form = CurrencyForm(request.POST)
+        form = CurrencyForm()
         #if form.is_valid(): No longer working due to AJAX call instead of form action
         data = json.loads(request.body.decode('utf-8'))
         print(data)
@@ -39,8 +43,6 @@ def index(request):
         form = CurrencyForm()
 
         currencies = Currency.objects.all()
-        print(currencies)
         currdict = {k:v for (k,v) in [(x.name, x.value) for x in currencies]}
-        print(currdict)    
 
-        return render(request, 'index.html', {"form":form, "currencies" : currdict})
+        return render(request, 'example.html', {"form":form, "currencies" : currdict})

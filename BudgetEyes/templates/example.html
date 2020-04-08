@@ -14,7 +14,7 @@
                   <h4> Currency: [[ name ]] - Value: [[ value ]] SEK </h4>
               </li>
           </ul>
-            <form @submit.prevent="test" action="/app/" method="post">
+            <form @submit.prevent="test">
               {% csrf_token %}
               {{ form }}
               <input type="submit" value="Submit">
@@ -41,7 +41,7 @@ const app = new Vue({
   },
   methods: {
     test: function(event){
-      console.log("In test:", event.target.elements)
+      console.log("In test:", event)
       let curr = event.target.elements.currency_name.value;
       let val = event.target.elements.new_value.value;
       console.log(curr, val);
