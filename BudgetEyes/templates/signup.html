@@ -34,16 +34,13 @@
     <b-container class="signup-container">
       <b-row class="mt-5">
         <b-col> </b-col>
-        <b-col cols="8">
-          <form id="frm" action="/signup/" method="post">
+        <b-col cols="6" style="text-align : center;">
+          <form id="frm" action="/signup/" method="post" style = "display : inline-block; font-family: verdana;">
             {% csrf_token %}
-            Firstname: {{ form.firstname }} <br/>
-            Lastname : {{ form.lastname }} <br/>
-            Username : {{ form.username }} <br/>
-            Email : {{ form.email }} <br/>
-            Password: {{ form.password }} <br/>
-            Enter password again: {{ form.re_password }} <br/>
-            <input type="submit" value="Sign up">
+            <table>
+            {{ form.as_table }}
+            </table>
+            <input type="submit" value="Sign up"> 
           </form>
         </b-col>
         <b-col> </b-col>

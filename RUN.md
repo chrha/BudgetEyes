@@ -8,8 +8,8 @@
 
 ## Install dependencies:
 
->  `cd path/to/TDDD27`  
->  `pipenv install`
+>  `cd path/to/tddd27`  
+>  `pipenv install --dev`
 
 # How to run the app:
 
