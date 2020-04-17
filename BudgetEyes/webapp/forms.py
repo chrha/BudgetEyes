@@ -27,12 +27,12 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-  firstname = forms.CharField(max_length=40, label="First name")
-  lastname = forms.CharField(max_length=40, label="Last name")
-  username = forms.CharField(max_length=40, label="Username")
-  email = forms.EmailField(max_length=20, label="Email")
-  password = forms.CharField(max_length=128, label="Pasword", widget=forms.PasswordInput) 
-  re_password = forms.CharField(max_length=128, label="Enter password again", widget=forms.PasswordInput)
+  firstname = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs={'placeholder' : "First name"}))
+  lastname = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs={'placeholder' : "Last name"}))
+  username = forms.CharField(max_length=40, label="", widget=forms.TextInput(attrs={'placeholder' : "Username"}))
+  email = forms.EmailField(max_length=20, label="", widget=forms.TextInput(attrs={'placeholder' : "Email"}))
+  password = forms.CharField(max_length=128, label="", widget=forms.PasswordInput(attrs={'placeholder' : "Password"})) 
+  re_password = forms.CharField(max_length=128, label="", widget=forms.PasswordInput(attrs={'placeholder' : "Re-enter Password"}))
 
   def clean(self):
     super(RegisterForm, self).clean()
