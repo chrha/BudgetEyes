@@ -27,13 +27,14 @@ SECRET_KEY = 'q)=ad52g!w)d7$q22tm*c!8#nptmq%b+x!kz$zkk$=8cz_4m!h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'webapp.apps.WebappConfig',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,6 +74,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BudgetEyes.wsgi.application'
 
+
+CORS_ALLOW_CREDENTIALS = False
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'HEAD',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'access-control-allow-origin',
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

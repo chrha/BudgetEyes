@@ -13,10 +13,14 @@ from .models import Currency
 
 
 # Create your views here.
-
-
 def index(request):
     return redirect("/example")
+
+def ex(request):
+    print("got request")
+    resp = HttpResponse("You got me!")
+    print(resp.has_header("Access-Control-Allow-Origin"))
+    return resp
 
 @login_required
 def example(request):
