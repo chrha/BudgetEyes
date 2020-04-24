@@ -1,5 +1,6 @@
 .vscode
 *.lock
+*lock.json
 BudgetEyes/webapp/migrations
 node_modules
-*.json
+.jshintrc
