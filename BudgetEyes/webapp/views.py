@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 
@@ -13,6 +14,7 @@ from .models import Currency
 
 
 # Create your views here.
+        
 def index(request):
     return redirect("/example")
 

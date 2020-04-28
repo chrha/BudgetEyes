@@ -1,21 +1,25 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link v-bind:to="{name : 'About'}">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
 
 <style>
 
+html {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(to bottom, #effcef, #ccedd2, #94d3ac, #655c56);
+  min-height: 100%;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
 #nav {
