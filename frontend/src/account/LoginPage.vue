@@ -23,7 +23,9 @@
         <b-button id="submit-b" class="mt-1" type="submit" variant="primary">Submit</b-button>
         <b-button id="reset-b" class="mt-1" type="reset" variant="danger">Reset</b-button>
         <div class="link-div">
-          <a class="signup-link" href="#"> Not registred? Sign up here </a>
+          <router-link class="signup-link" to="/register">
+          Not registred? Sign up here
+          </router-link>
         </div>
       </b-form>
   </div>
