@@ -34,7 +34,7 @@
     "root": true,
     "env": {
       "node": true,
-      "browser" : true
+      "browser": true
     },
     "extends": [
       "plugin:vue/essential",
@@ -44,8 +44,9 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-multiple-empty-lines" : "off",
-      "linebreak-style" : "off"
+      "no-multiple-empty-lines": "off",
+      "linebreak-style": "off",
+      "no-trailing-spaces": "off"
     }
   },
   "browserslist": [
