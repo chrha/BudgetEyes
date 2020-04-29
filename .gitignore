@@ -1,11 +1,11 @@
-.vscode
 *.lock
 *lock.json
-BudgetEyes/webapp/migrations
+**/migrations/*
 .jshintrc
 .DS_Store
 node_modules
 /dist
+*.sqlite3-journal
 
 # local env files
 .env.local
