@@ -1,12 +1,19 @@
+# Pipenv
 *.lock
 *lock.json
+
+#Django db stuff
 **/migrations/*
+*.sqlite3-journal
+
+# Jshint
 .jshintrc
+
+#Misc
 .DS_Store
 node_modules
 /dist
-*.sqlite3-journal
-
+__pycache__/
 # local env files
 .env.local
 .env.*.local

@@ -76,23 +76,25 @@ class UserViewSet(CreateListUpdateViewSet):
   @action(detail=False, methods=['put'], permission_classes=[])
   def login(self, request):
     data = request.data
-    user = authenticate(username=data.get('username'), password=data.get('password'), request=request)
+    user = authenticate(username=data.get('username'), password=data.get('password'))
     if user:
-      token = Token.objects.get(user=user)
-      return Response(headers={'Authorization' : token.key})
+      token = Token.objects.filter(user=user)
+      if token:
+        # Remove old token and create a new one for this session
+        token[0].delete()
+      token = Token.objects.create(user=user)
+      return Response(headers={'Access-Control-Expose-Headers': 'Authorization','Authorization' : token.key})
     else:
-      return Response("Invalid credentials", status=status.HTTP_400_BAD_REQUEST)
+      return Response({"status" : "Invalid credentials" }, status=status.HTTP_400_BAD_REQUEST)
   
   @action(detail=False, methods=['put'], permission_classes=[])
   def register(self, request):
-    data = request.data
+    data = {k:v for k,v in request.data.items() if not k == 'rePassword'} 
     try:
       user = User.objects.create_user(**data)
-      Token.objects.create(user=user)
     except IntegrityError:
       return Response("That username is already taken", status=status.HTTP_400_BAD_REQUEST)
     except OperationalError:
-      # TODO: Remove user if it was created 
       return Response("Something went wrong on our end, try again later", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
       
     return Response("User created!", status=status.HTTP_201_CREATED)

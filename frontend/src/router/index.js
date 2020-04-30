@@ -17,6 +17,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginPage,
+    props: true,
   },
   {
     path: '/register',
