@@ -1,6 +1,9 @@
 <template>
   <div class="main">
-    <h2 class="header"> Login </h2>
+    <NavBar></NavBar>
+
+    <p v-if="this.message"> {{ message }} </p>
+    <h2 class="header mt-5"> Login </h2>
       <b-form id="loginform" @submit.prevent="Login" @reset="Reset">
         <b-form-input
           id="username-input"
@@ -8,6 +11,7 @@
           v-model="form.username"
           required
           placeholder="Enter username"
+          autocomplete="username"
         >
         </b-form-input>
         <b-form-input
@@ -17,6 +21,7 @@
           type="password"
           required
           placeholder="Enter password"
+          autocomplete="current-password"
         >
         </b-form-input>
 
@@ -32,12 +37,18 @@
 </template>
 
 <script>
-import server from '../ajax/client';
+import Nav from '@/components/navbar.vue';
+import axiosInstance from '../ajax/client';
 
 export default {
   name: 'LoginPage',
+  props: ['msg'],
+  components: {
+    NavBar: Nav,
+  },
   data() {
     return {
+      message: this.msg,
       form: {
         username: '',
         password: '',
@@ -46,12 +57,15 @@ export default {
   },
   methods: {
     Login() {
-      server.post('/ex/', {
-        username: this.username,
-        password: this.password,
+      axiosInstance.put('auth/login/', {
+        username: this.form.username,
+        password: this.form.password,
       }).then((response) => {
-        alert(response);
+        const token = response.headers.authorization;
+        this.$store.commit('setToken', token);
+        this.$store.commit('setUsername', this.form.username);
       }).catch((error) => {
+        // eslint-disable-next-line 
         alert(error);
       });
     },

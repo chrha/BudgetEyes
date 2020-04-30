@@ -7,7 +7,7 @@
       <b-form-input
         id="fname"
         label="Firstname"
-        v-model="form.firstName"
+        v-model="form.first_name"
         required
         placeholder="Enter your firstname"   
       >
@@ -15,7 +15,7 @@
       <b-form-input
         id="lname"
         label="Lastname"
-        v-model="form.lastName"
+        v-model="form.last_name"
         required
         placeholder="Enter your lastname" 
       >
@@ -23,9 +23,10 @@
       <b-form-input
         id="uname"
         label="Username"
-        v-model="form.userName"
+        v-model="form.username"
         required
-        placeholder="Enter your username"   
+        placeholder="Enter your username"
+        autocomplete="username"
       >
       </b-form-input>
       <b-form-input
@@ -43,7 +44,8 @@
         v-model="form.password"
         type="password"
         required
-        placeholder="Enter your password"   
+        placeholder="Enter your password"
+        autocomplete="new-password"
       >
       </b-form-input>
       <b-form-input
@@ -52,22 +54,22 @@
         v-model="form.rePassword"
         type="password"
         required
-        placeholder="Enter your password again"   
+        placeholder="Enter your password again"
+        autocomplete="new-password"
       >
       </b-form-input>
       <b-button class=submitbutton type="submit"> Register </b-button>
     </b-form-group>
   </b-form>
     <p v-if="errors.length === 1">
-      <b>Please correct the following error:</b>
         <ul>
-          <li> {{errors[0]}} </li>
+          <p class=error-item> {{errors[0]}} </p>
         </ul>
     </p>
-    <p v-else-if="errors.length !== 0">
+    <p v-else-if="errors.length">
       <b>Please correct the following errors:</b>
       <ul>
-        <li v-for="error in errors" :key="error">{{ error }}</li>
+        <li v-for="error in errors" :key="error"><strong> {{ error }} </strong></li>
       </ul>
     </p>
   </div>
@@ -75,8 +77,8 @@
 
 <script>
 
-import Nav from '@/components/navbar.vue';
-// import server from '@/ajax/client';
+import Nav from '../components/navbar.vue';
+import axiosInstance from '../ajax/client';
 
 export default {
   name: 'Register',
@@ -87,22 +89,28 @@ export default {
     return {
       errors: [],
       form: {
-        firstName: '',
-        lastName: '',
-        userName: '',
+        first_name: '',
+        last_name: '',
+        username: '',
         email: '',
         password: '',
         rePassword: '',
       },
     };
   },
+  created() {
+    console.log(this.errors);
+  },
   methods: {
     Register() {
       if (this.form.password !== this.form.rePassword) {
         if (!this.errors.length) this.errors.push('Passwords must match');
       } else {
-        this.errors.pop();
-        // server.post('/example', this.form);
+        axiosInstance.put('auth/register/', this.form).then(() => { 
+          this.$router.push({ name: 'Login', params: { msg: 'User created!' } });
+        }).catch((response) => {
+          console.log(response);
+        });
       }
     },
   },
@@ -125,6 +133,10 @@ export default {
   margin-top: 1%;
   float: left ;
 }
-
+.error-item {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;
+  font-size: 30px;
+  color: red;
+}
 
 </style>
