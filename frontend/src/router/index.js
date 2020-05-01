@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import LoginPage from '../account/LoginPage.vue';
-import stockPage from '../views/stockpage.vue';
+import StockPage from '../views/StockPage.vue';
 import RegisterPage from '../account/RegisterPage.vue';
 
 
@@ -9,9 +9,9 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'stockpage',
-    component: stockPage,
+    path: '/stockpage',
+    name: 'StockPage',
+    component: StockPage,
   },
   {
     path: '/login',
