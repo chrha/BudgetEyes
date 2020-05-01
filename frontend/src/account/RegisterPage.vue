@@ -77,7 +77,7 @@
 
 <script>
 
-import Nav from '../components/navbar.vue';
+import Nav from '../components/NavBar.vue';
 import axiosInstance from '../ajax/client';
 
 export default {
