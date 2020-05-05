@@ -1,6 +1,5 @@
 <template>
   <div class="budgetpage">
-    <navBar/>
     <div class="row">
       <div class="column">
         <BudgetCalc/>
@@ -14,14 +13,12 @@
 
 <script>
 // @ is an alias to /src
-import navBar from '@/components/NavBar.vue';
 import BudgetCalc from '@/budget/BudgetCalc.vue';
 import BudgetInfo from '@/budget/BudgetInfo.vue';
 
 export default {
   name: 'BudgetPage',
   components: {
-    navBar,
     BudgetCalc,
     BudgetInfo,
   },

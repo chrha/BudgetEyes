@@ -1,6 +1,5 @@
 <template>
   <div>
-  <NavBar></NavBar>
   <h2 class="register"> Create account </h2>
   <b-form @submit.prevent="Register">
     <b-form-group class=reg-grp> 
@@ -77,14 +76,10 @@
 
 <script>
 
-import Nav from '../components/NavBar.vue';
 import axiosInstance from '../ajax/client';
 
 export default {
   name: 'Register',
-  components: {
-    NavBar: Nav,
-  },
   data() {
     return {
       errors: [],
@@ -98,9 +93,6 @@ export default {
       },
     };
   },
-  created() {
-    console.log(this.errors);
-  },
   methods: {
     Register() {
       if (this.form.password !== this.form.rePassword) {
@@ -109,6 +101,7 @@ export default {
         axiosInstance.put('auth/register/', this.form).then(() => { 
           this.$router.push({ name: 'Login', params: { msg: 'User created!' } });
         }).catch((response) => {
+          // eslint-disable-next-line 
           console.log(response);
         });
       }
@@ -136,7 +129,6 @@ export default {
 .error-item {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;
   font-size: 30px;
-  color: red;
 }
 
 </style>
