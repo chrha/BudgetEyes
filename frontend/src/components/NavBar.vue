@@ -8,11 +8,11 @@
           </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-          
+
           <b-collapse class="nav-collapse" is-nav>
               <b-navbar-nav class="navbar-nav">
-                  <b-nav-item class="navbar-item-custom" href="#">Budget</b-nav-item>
-                  <b-nav-item class="navbar-item-custom" href="#">Stocks</b-nav-item>
+                  <b-nav-item class="navbar-item-custom" href="#/budgetpage">Budget</b-nav-item>
+                  <b-nav-item class="navbar-item-custom" href="#/stockpage">Stocks</b-nav-item>
               </b-navbar-nav>
 
               <!-- Right aligned nav items -->
@@ -25,7 +25,7 @@
                     </b-form-input>
                     <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
                 </b-nav-form>
-                
+
                 <b-nav-item-dropdown right v-if="this.$store.state.username">
                     <!-- Using 'button-content' slot -->
                     <template v-slot:button-content>
