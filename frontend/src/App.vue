@@ -1,8 +1,20 @@
 <template>
   <div id="app">
+    <Nav/>
     <router-view/>
   </div>
 </template>
+
+<script>
+import NavBar from '@/components/NavBar.vue';
+
+
+export default {
+  components: {
+    Nav: NavBar,
+  },
+};
+</script>
 
 <style>
 
@@ -11,7 +23,7 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, #effcef, #ccedd2, #94d3ac, #655c56);
+  background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac, #655c56);
   min-height: 100%;
 }
 

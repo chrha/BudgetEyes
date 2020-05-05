@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-    <NavBar></NavBar>
 
     <p v-if="this.message"> {{ message }} </p>
     <h2 class="header mt-5"> Login </h2>
@@ -37,15 +36,11 @@
 </template>
 
 <script>
-import Nav from '@/components/NavBar.vue';
 import axiosInstance from '../ajax/client';
 
 export default {
   name: 'LoginPage',
   props: ['msg'],
-  components: {
-    NavBar: Nav,
-  },
   data() {
     return {
       message: this.msg,

@@ -1,6 +1,5 @@
 <template>
   <div class="stockpage">
-    <navBar/>
     <b-container>
       <b-row>
         <b-col>
@@ -24,7 +23,6 @@
 
 <script>
 // @ is an alias to /src
-import NavBar from '@/components/NavBar.vue';
 import StockComponent from '@/stocks/StockComponent.vue';
 import StockSearch from '@/stocks/StockSearch.vue';
 import StockLog from '@/stocks/StockLog.vue';
@@ -32,7 +30,6 @@ import StockLog from '@/stocks/StockLog.vue';
 export default {
   name: 'StockPage',
   components: {
-    NavBar,
     StockComponent,
     StockSearch,
     StockLog,

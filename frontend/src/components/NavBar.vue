@@ -11,7 +11,7 @@
 
           <b-collapse class="nav-collapse" is-nav>
               <b-navbar-nav class="navbar-nav">
-                  <b-nav-item class="navbar-item-custom" href="#/budgetpage">Budget</b-nav-item>
+                    <b-nav-item class="navbar-item-custom" href="#/budgetpage">Budget</b-nav-item>
                   <b-nav-item class="navbar-item-custom" href="#/stockpage">Stocks</b-nav-item>
               </b-navbar-nav>
 
