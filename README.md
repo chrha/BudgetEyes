@@ -1,5 +1,8 @@
 # Project for the course TDDD27 - Advanced Web Programming
 
+# [Link to mid course screencast](https://youtu.be/nrZc5Tm-Kvg) 
+
+
 ## Functional specification
 The vision with this project is to design a website for personal finance and budgeting.
 
