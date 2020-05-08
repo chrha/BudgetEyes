@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Budget, Stock 
+from .models import Budget, Stock ,Expense
 
 
 
@@ -17,6 +17,12 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Stock
     fields = ['name', 'value']
+
+class ExpenseSerializer(serializers.HyperlinkedModelSerializer):
+
+  class Meta:
+    model = Expense
+    fields = '__all__'
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
   budget = serializers.SerializerMethodField()
