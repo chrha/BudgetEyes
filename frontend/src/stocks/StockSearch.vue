@@ -3,7 +3,7 @@
     <b-container>
       <b-row>
         <b-col >
-             <input> 
+             <input class=searchbar> 
              <b-button class= "stockPageButton">Search</b-button>
         </b-col>
 
@@ -19,11 +19,14 @@ export default {
 </script>
 
 
-<style>
-    .stockPageButton{
-        background-color: #C7F0DB;
-        color: #000000;
-        
-    }
-  
+<style scoped>
+.stockPageButton{
+    background-color: #C7F0DB;
+    color: #000000;
+    
+}
+.searchbar {
+    background-color: white;
+}
+
 </style>

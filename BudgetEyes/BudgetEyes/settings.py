@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'webapp.apps.WebappConfig',
     'budgetapi.apps.BudgetapiConfig',
     'corsheaders',
     'rest_framework',
