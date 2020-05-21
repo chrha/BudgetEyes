@@ -2,11 +2,12 @@
 <div id="stock-search">
     <b-container>
       <b-row>
-        <b-col >
-             <input> 
-             <b-button class= "stockPageButton">Search</b-button>
+        <b-col  >
+             <v-text-field label="Enter stock name"></v-text-field>
         </b-col>
-
+        <b-col>
+           <v-btn id= "stockSearchButton" >Search</v-btn>
+        </b-col>
       </b-row>
     </b-container>
 </div>
@@ -19,11 +20,11 @@ export default {
 </script>
 
 
-<style>
-    .stockPageButton{
-        background-color: #C7F0DB;
-        color: #000000;
-        
+<style scoped>
+    #stockSearchButton{
+      float: left;
+      background-color: #C7F0DB;
+      color: #000000;
     }
-  
+    
 </style>
