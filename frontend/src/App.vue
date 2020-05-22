@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Nav/>
+    <v-app id="v-app">
     <router-view/>
+    </v-app>
   </div>
 </template>
 
@@ -22,7 +24,7 @@ html {
   height: 100%;
 }
 
-body {
+#v-app {
   background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac, #655c56);
   min-height: 100%;
 }
