@@ -23,13 +23,9 @@ export default {
 html {
   height: 100%;
 }
-
 #v-app {
-  background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac, #655c56);
+  background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac);
   min-height: 100%;
-}
-
-#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
