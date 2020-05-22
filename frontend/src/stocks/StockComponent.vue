@@ -36,9 +36,12 @@ export default {
       curr_stock: 'stock1',
     };
   },
+  /**
+   * send displayed stock to stocklog.
+   * receive chosen dropdown item to display.
+   */
   mounted() {
     this.$root.$emit('msg_from_stockcomp', this.curr_stock);
-    console.log('emitted from comp');
     this.$root.$on('msg_from_stocklog', (value) => {
       let exists = false;
       for (let i = 0; i < this.stocks.length; i += 1) {
@@ -57,6 +60,9 @@ export default {
     });
   },
   methods: {
+    /**
+     * Triggered by button click & displays next stock in stock list.
+     */
     nextStock() {
       if (this.count === this.stocks.length - 1) {
         this.count = 0;
@@ -66,6 +72,9 @@ export default {
       this.curr_stock = this.stocks[this.count];
       this.$root.$emit('msg_from_stockcomp', this.curr_stock);
     },
+    /**
+     * Triggered by button click & displays previous stock in stock list.
+     */
     previousStock() {
       if (this.count === 0) {
         this.count = this.stocks.length - 1;

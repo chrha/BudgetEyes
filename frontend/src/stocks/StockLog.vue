@@ -59,34 +59,46 @@ export default {
       followButton: 'Follow',
     };
   },
+  /**
+   * After the component is mounted, StockLog listens to StockComponent
+   * for update on the displayed stock, and updates follow button.
+   */
   mounted() {
     this.$root.$on('msg_from_stockcomp', (shownStock) => {
       this.disp_stock = shownStock;
-      console.log('madlad: '.concat(this.disp_stock));
+      let check = true;
       Object.keys(this.followed_dropdown).forEach((index) => {
-        console.log(index);
-        if (this.followed_dropdown[index] === shownStock) {
+        if (this.followed_dropdown[index].text === shownStock) {
           this.followButton = 'Unfollow';
-        } else this.followButton = 'Follow';
+          this.value = this.followed_dropdown[index].text;
+          check = false;
+        }
       });
-      console.log('loop');
+      if (check) {
+        this.followButton = 'Follow';
+        this.value = '';
+      }
     });
-    console.log('outside msg rec');
   },
   methods: {
+    /**
+     * updates followbutton and dropdown display value, which is sent to StockComponent
+     */
     onChange(value) {
-      console.log(value);
       this.followButton = 'Unfollow';
+      this.disp_stock = value;
       this.$root.$emit('msg_from_stocklog', value);
     },
+    /**
+     * Iterates dropdown list items and updates button whether
+     *  to be able to remove or add displayed item to the list.
+     */
     onFollow() {
       let key = 0;
       Object.keys(this.followed_dropdown).forEach((i) => {
-        console.log('on followloop'.concat(this.followed_dropdown[i].text).concat(this.disp_stock));
         if (this.followed_dropdown[i].text === this.disp_stock) {
           this.followButton = 'Unfollow';
-          key = i;
-          console.log(this.followed_dropdown[i].concat(': ').concat(i));
+          key = i;   
         }
       }); 
       if (this.followButton === 'Follow') {
@@ -96,6 +108,7 @@ export default {
       } else if (this.followButton === 'Unfollow') {
         this.followed_dropdown.splice(key, 1);
         this.followButton = 'Follow';
+        this.value = '';
       }
     },
   },
