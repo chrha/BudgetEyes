@@ -1,10 +1,10 @@
 <template>
   <div class="budgetpage">
     <div class="row">
-      <div class="column">
+      <div class="calc">
         <BudgetCalc/>
         </div>
-      <div class="column">
+      <div class="inf">
         <BudgetInfo/>
       </div>
     </div>
@@ -27,15 +27,13 @@ export default {
 </script>
  <style scoped>
 
- .column {
+ .calc {
   float: left;
   margin: auto;
 }
-.center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
-}
+.inf {
+  background-color: transparent;
+  float: left;
+  margin-right: auto;}
 
 </style>
