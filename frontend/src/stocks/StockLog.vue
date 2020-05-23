@@ -1,40 +1,30 @@
 <template>
     <div id="stock-log">
-        <b-container>
-            <b-row class="mb-5">
-                <b-col>
-                    <b-button class= "stockPageButton"> Follow</b-button> 
-                </b-col>
+        <v-container id="log-container">
+            <v-row class="mb-5">
+                <v-col>
+                  <v-btn id= "followButton" 
+                  v-on:click="onFollow()"> {{followButton}}</v-btn>
+                </v-col>
 
-                <b-col >
-                    <b-button class= "stockPageButton">Buy</b-button>
-                </b-col>
-            </b-row>
+            </v-row>
 
-            <b-row>
-           
-            <b-col >
-            
-                <b-dropdown text="Followed Stocks" >
-                    <b-dropdown-item active>Placeholder1
-                    </b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>   
-                    <b-dropdown-item active>Placeholder2</b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>                  
-                  </b-dropdown>             
-            </b-col>
-
-            <b-col >
-                <b-dropdown text="Bought Stocks" >
-                    <b-dropdown-item active>Placeholder2</b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>   
-                    <b-dropdown-item active>Placeholder3</b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>                  
-                  </b-dropdown>   
-                      
-            </b-col>
-            </b-row>
-        </b-container>
+            <v-row>
+                <v-col >
+                    <v-overflow-btn
+                        class="my-2"
+                        v-model="value"
+                        @change="onChange(value)"
+                        :items="followed_dropdown"
+                        label="Followed Stocks"
+                        editable
+                        item-value="text"
+                    ></v-overflow-btn>           
+                </v-col>
+            </v-row>
+            <v-row>
+            </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -42,15 +32,103 @@
 <script>
 export default {
   name: 'StockLog',
+  data() { 
+    return {
+      followed_dropdown: 
+          [
+            { text: 'stock1' },
+            { text: 'stock2' },
+            { text: 'stock4' },
+          ],
+      bought_dropdown: 
+          [
+            { text: 'bought1' },
+            { text: 'bought2' },
+            { text: 'bought3' },
+          ],
+      available_stocks:
+        [
+          { text: 'stock1' },
+          { text: 'stock2' },
+          { text: 'stock3' },
+          { text: 'stock4' },
+          { text: 'stock5' },
+        ],
+      value: '',
+      disp_stock: '',
+      followButton: 'Follow',
+    };
+  },
+  /**
+   * After the component is mounted, StockLog listens to StockComponent
+   * for update on the displayed stock, and updates follow button.
+   */
+  mounted() {
+    this.$root.$on('msg_from_stockcomp', (shownStock) => {
+      this.disp_stock = shownStock;
+      let check = true;
+      Object.keys(this.followed_dropdown).forEach((index) => {
+        if (this.followed_dropdown[index].text === shownStock) {
+          this.followButton = 'Unfollow';
+          this.value = this.followed_dropdown[index].text;
+          check = false;
+        }
+      });
+      if (check) {
+        this.followButton = 'Follow';
+        this.value = '';
+      }
+    });
+  },
+  methods: {
+    /**
+     * updates followbutton and dropdown display value, which is sent to StockComponent
+     */
+    onChange(value) {
+      this.followButton = 'Unfollow';
+      this.disp_stock = value;
+      this.$root.$emit('msg_from_stocklog', value);
+    },
+    /**
+     * Iterates dropdown list items and updates button whether
+     *  to be able to remove or add displayed item to the list.
+     */
+    onFollow() {
+      let key = 0;
+      Object.keys(this.followed_dropdown).forEach((i) => {
+        if (this.followed_dropdown[i].text === this.disp_stock) {
+          this.followButton = 'Unfollow';
+          key = i;   
+        }
+      }); 
+      if (this.followButton === 'Follow') {
+        this.followed_dropdown.push({ text: this.disp_stock });
+        this.value = this.disp_stock;
+        this.followButton = 'Unfollow';
+      } else if (this.followButton === 'Unfollow') {
+        this.followed_dropdown.splice(key, 1);
+        this.followButton = 'Follow';
+        this.value = '';
+      }
+    },
+  },
+
 };
 </script>
 
 
 
-<style>
-    .stockPageButton{
+<style scoped>
+    #followButton{
         background-color: #C7F0DB;
-        color: #000000;
-        
+        color: #000000;    
+    }
+     #buyButton{
+        background-color: #C7F0DB;
+        color: #000000;    
+    }
+     #unfollowButton{
+        background-color: #C7F0DB;
+        color: #000000;    
     }
 </style>
