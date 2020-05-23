@@ -15,6 +15,7 @@ class Profile(models.Model):
   birth_date = models.DateField(null=True, blank=True)
   bio = models.TextField(max_length=500, blank=True)
   city = models.CharField(max_length=30, blank=True)
+  image = models.ImageField(upload_to='profile/%Y/%m/%d' , null=True)
   stocks = models.ManyToManyField(Stock)
 
 # Makes it so that when a user is created, a profile is also created

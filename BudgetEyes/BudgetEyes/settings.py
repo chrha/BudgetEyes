@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'webapp.apps.WebappConfig',
     'budgetapi.apps.BudgetapiConfig',
     'corsheaders',
     'rest_framework',
@@ -106,7 +105,6 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-
 ]
 
 REST_FRAMEWORK = {
@@ -149,8 +147,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = "/login/"
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -170,6 +166,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'budgetapi{}media{}'.format(os.sep, os.sep))
 
 # Sentry.io initialization
 

@@ -31,7 +31,7 @@
                     <template v-slot:button-content>
                         <em> {{ $store.state.username }} </em>
                     </template>
-                    <b-dropdown-item> Profile </b-dropdown-item>
+                    <b-dropdown-item @click="routeProfile"> Profile </b-dropdown-item>
                     <b-dropdown-item> Sign Out </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-navbar-nav v-else class="navbar-nav">
@@ -56,6 +56,9 @@ export default {
     },
     routeRegister() {
       this.$router.push({ name: 'Register' });
+    },
+    routeProfile() {
+      this.$router.push({ name: 'ProfilePage' });
     },
   },
 };
