@@ -50,6 +50,11 @@ export default {
       },
     };
   },
+  mounted() {
+    if (this.$store.username) {
+      this.$router.push({ name: 'BudgetPage' });
+    }
+  },
   methods: {
     Login() {
       axiosInstance.put('auth/login/', {
