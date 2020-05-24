@@ -32,7 +32,7 @@
                         <em> {{ $store.state.username }} </em>
                     </template>
                     <b-dropdown-item @click="routeProfile"> Profile </b-dropdown-item>
-                    <b-dropdown-item> Sign Out </b-dropdown-item>
+                    <b-dropdown-item @click="logOut"> Sign Out </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-navbar-nav v-else class="navbar-nav">
                   <b-nav-item class="navbar-item-custom" @click="routeLogin">Log in</b-nav-item>
@@ -59,6 +59,12 @@ export default {
     },
     routeProfile() {
       this.$router.push({ name: 'ProfilePage' });
+    },
+    logOut() {
+      this.$cookies.remove('token');
+      this.$cookies.remove('username');
+      this.$store.commit('setUsername', '');
+      this.$router.push({ name: 'StockPage' });
     },
   },
 };

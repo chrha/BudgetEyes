@@ -15,6 +15,11 @@ export default {
   components: {
     Nav: NavBar,
   },
+  mounted() {
+    if (this.$cookies.isKey('username')) {
+      this.$store.commit('setUsername', this.$cookies.get('username'));
+    }
+  },
 };
 </script>
 

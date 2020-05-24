@@ -121,7 +121,7 @@ export default {
     };    
   },
   created() {
-    axiosInstance.get('auth/profile/', { headers: { Authorization: `Token ${this.$store.state.token}` } })
+    axiosInstance.get('auth/profile/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
       .then((response) => {
         this.profile.birthDate = response.data.birth_date;
         this.bio = response.data.bio;
@@ -163,7 +163,7 @@ export default {
         last_name: this.profile.name.split(' ')[1],
         username: this.$store.state.username,
       };
-      axiosInstance.put('auth/profile/', data, { headers: { Authorization: `Token ${this.$store.state.token}` } });
+      axiosInstance.put('auth/profile/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } });
       this.toggleEditMode();
     },
     fileChanged(event) {
@@ -172,7 +172,7 @@ export default {
       const formData = new FormData();
       formData.append('profilepic', file);
       axiosInstance.put('auth/profilepic/', formData, 
-        { headers: { Authorization: `Token ${this.$store.state.token}` } });
+        { headers: { Authorization: `Token ${this.$cookies.get('token')}` } });
     },
     hexToBase64(str) {
       return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, '').replace(/([\da-fA-F]{2}) ?/g, '0x$1 ').replace(/ +$/, '').split(' ')));
