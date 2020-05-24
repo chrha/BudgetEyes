@@ -62,7 +62,8 @@ export default {
         password: this.form.password,
       }).then((response) => {
         const token = response.headers.authorization;
-        this.$store.commit('setToken', token);
+        this.$cookies.set('token', token);
+        this.$cookies.set('username', this.form.username);
         this.$store.commit('setUsername', this.form.username);
       }).catch((error) => {
         // eslint-disable-next-line 

@@ -5,7 +5,6 @@ import StockPage from '../views/StockPage.vue';
 import BudgetPage from '../views/BudgetPage.vue';
 import RegisterPage from '../account/RegisterPage.vue';
 import ProfilePage from '../account/ProfilePage.vue';
-import store from '../store';
 
 
 Vue.use(VueRouter);
@@ -20,11 +19,15 @@ const routes = [
     path: '/budgetpage',
     name: 'BudgetPage',
     component: BudgetPage,
+    meta: {
+      title: 'Budget',
+    },
   },
   {
     path: '/login',
     name: 'Login',
     component: LoginPage,
+    title: 'Login', 
     props: true,
     meta: {
       requiresNotAuth: true,
@@ -54,13 +57,13 @@ const router = new VueRouter({
 
 router.beforeEach((to, _from, next) => {
   if (to.meta.requiresNotAuth) {
-    if (store.getters.getToken !== '') {
+    if (Vue.$cookies.isKey('token')) {
       next({ name: 'BudgetPage' });
     } else {
       next();
     }
   } else if (to.meta.requiresAuth) {
-    if (store.getters.getToken === '') {
+    if (!Vue.$cookies.isKey('token')) {
       next({ name: 'Login' });
     } else {
       next();
