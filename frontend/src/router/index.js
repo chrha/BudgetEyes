@@ -5,11 +5,18 @@ import StockPage from '../views/StockPage.vue';
 import BudgetPage from '../views/BudgetPage.vue';
 import RegisterPage from '../account/RegisterPage.vue';
 import ProfilePage from '../account/ProfilePage.vue';
+import HomePage from '../home/HomePage.vue';
 
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: HomePage,
+    props: true,
+  },
   {
     path: '/stockpage',
     name: 'StockPage',
@@ -55,7 +62,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to, from, next) => {
   if (to.meta.requiresNotAuth) {
     if (Vue.$cookies.isKey('token')) {
       next({ name: 'BudgetPage' });

@@ -64,6 +64,7 @@ export default {
           this.$cookies.set('token', token);
           this.$cookies.set('username', this.form.username);
           this.$store.commit('setUsername', this.form.username);
+          this.$router.push({ name: 'Home' });
         }).catch((error) => {
           // eslint-disable-next-line 
           alert(error);

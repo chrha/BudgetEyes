@@ -3,7 +3,7 @@
   <div id="navbar-app">
     <div>
       <b-navbar class = "navbar">
-          <b-navbar-brand href="#">
+          <b-navbar-brand href="#/">
               <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Eye-Brown.svg" alt="BE" style="width:40px;height:40px;">
           </b-navbar-brand>
 
@@ -52,19 +52,20 @@ export default {
   name: 'navBar',
   methods: {
     routeLogin() {
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: 'Login' }).catch(() => {});
     },
     routeRegister() {
-      this.$router.push({ name: 'Register' });
+      this.$router.push({ name: 'Register' }).catch(() => {});
     },
     routeProfile() {
-      this.$router.push({ name: 'ProfilePage' });
+      this.$router.push({ name: 'ProfilePage' }).catch(() => {});
     },
     logOut() {
       this.$cookies.remove('token');
       this.$cookies.remove('username');
+      const tmpuser = this.$store.state.username;
       this.$store.commit('setUsername', '');
-      this.$router.push({ name: 'StockPage' });
+      this.$router.push({ name: 'Home', params: { previous: tmpuser } }).catch((err) => { console.log(err); });
     },
   },
 };
