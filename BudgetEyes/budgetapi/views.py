@@ -121,6 +121,7 @@ class UserViewSet(CreateListUpdateViewSet):
   @action(detail=False, methods=['put'], permission_classes=[])
   def login(self, request):
     data = request.data
+    print(data)
     user = authenticate(username=data.get('username'), password=data.get('password'))
     if user:
       token = Token.objects.filter(user=user)
