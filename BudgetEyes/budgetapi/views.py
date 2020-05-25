@@ -67,7 +67,6 @@ class UserViewSet(CreateListUpdateViewSet):
       return Response("The passwords you've entered do not match", status=status.HTTP_400_BAD_REQUEST)
     token = request.headers.get('Authorization').split(' ')[1]
     user = Token.objects.select_related('user').get(key=token).user
-    print(pw, user)
     auth = user.check_password(pw)
     if not auth:
       user.set_password(pw)
@@ -82,7 +81,6 @@ class UserViewSet(CreateListUpdateViewSet):
     if user == AnonymousUser:
       return Response(data="Could not identfy user", status=status.HTTP_401_UNAUTHORIZED)
     profile = Profile.objects.get(user=user)
-    print(request.data)
     if request.method == 'GET':
       serializer = ProfileSerializer(profile)
       return Response(serializer.data)

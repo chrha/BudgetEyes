@@ -27,6 +27,8 @@ SECRET_KEY = 'q)=ad52g!w)d7$q22tm*c!8#nptmq%b+x!kz$zkk$=8cz_4m!h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+USE_POSTGRES_DB = False
+
 ALLOWED_HOSTS = []
 
 
@@ -121,12 +123,26 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
+POSTGRES_CONF = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME',''),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASS', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+        'PORT': '5432',
+    }
+}
+
+SQLITE_CONF = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+DATABASES = POSTGRES_CONF if USE_POSTGRES_DB else SQLITE_CONF
 
 
 # Password validation
