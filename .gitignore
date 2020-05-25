@@ -5,6 +5,7 @@
 #Django db stuff
 **/migrations/*
 *.sqlite3-journal
+*.sqlite3
 
 # Jshint
 .jshintrc
@@ -14,6 +15,8 @@
 node_modules
 /dist
 __pycache__/
+BudgetEyes/budgetapi/media
+
 # local env files
 .env.local
 .env.*.local
