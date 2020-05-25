@@ -134,6 +134,8 @@ class UserViewSet(CreateListUpdateViewSet):
   
   @action(detail=False, methods=['put'], permission_classes=[])
   def register(self, request):
+    if request.data.get('password') != request.data.get('rePassword'):
+      return Response("Passwords do not match", status=status.HTTP_400_BAD_REQUEST)
     data = {k:v for k,v in request.data.items() if not k == 'rePassword'} 
     try:
       user = User.objects.create_user(**data)
