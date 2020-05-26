@@ -6,6 +6,7 @@
 
       <v-text-field
         label ="Income"
+        v-model=income
         @change="income = $event">
       </v-text-field>
 
@@ -52,6 +53,7 @@
           </v-text-field>
         </div>
 
+      <v-btn small v-on:click="fetchData">Load your saved income and expenses</v-btn> <br> <br>
       <v-btn small v-on:click="calculateBudget">Calculate Budget</v-btn>
       <v-divider light ></v-divider>
       <div
@@ -103,6 +105,7 @@
 </template>
 
 <script>
+import axiosInstance from '../ajax/client';
 
 export default {
   name: 'BudgetCalc',
@@ -151,6 +154,22 @@ export default {
     },
   },
   methods: {
+    fetchData() {
+      axiosInstance.get('budget/income/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          this.income = response.data.income;
+        }).catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        });
+      axiosInstance.get('budget/expenses/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          console.log(response.data);
+        }).catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        });
+    },
     incramentCounter() {
       this.count += 1;
       this.expenses.push({
