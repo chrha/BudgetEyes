@@ -11,8 +11,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.authtoken.models import Token
 
-from .models import Budget, Stock, Profile
-from .serializers import BudgetSerializer, StockSerializer, UserSerializer, ProfileSerializer
+from .models import Budget, Stock, Profile, Expense
+from .serializers import BudgetSerializer, StockSerializer, UserSerializer, ProfileSerializer, ExpenseSerializer
 from .viewsets import CreateListUpdateViewSet
 
 # Create your views here.
@@ -32,14 +32,14 @@ class OwnBudget(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = BudgetSerializer
 
   def get_queryset(self):
-    user = self.request.user 
+    user = self.request.user
     return Budget.objects.filter(owner=user)
-        
+
 
 class UserDetail(generics.RetrieveUpdateAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
-  
+
 """
 
 class UserViewSet(CreateListUpdateViewSet):
@@ -54,12 +54,12 @@ class UserViewSet(CreateListUpdateViewSet):
       permission_classes = []
     else:
       permission_classes = [IsAuthenticated]
-      
+
     return [permission() for permission in permission_classes]
-    
+
 
   # ADD NEW ROUTES(actions) TO /auth/ HERE
-   
+
   @action(detail=False, methods=['put'])
   def change_password(self, request):
     pw = request.data.get('new_password')
@@ -93,7 +93,7 @@ class UserViewSet(CreateListUpdateViewSet):
       serializer.save()
       user_serializer.save()
       return Response(serializer.data)
-  
+
   @action(detail=False, methods=['get','put'])
   def profilepic(self, request):
     user = request.user
@@ -130,7 +130,7 @@ class UserViewSet(CreateListUpdateViewSet):
       return Response(headers={'Access-Control-Expose-Headers': 'Authorization','Authorization' : token.key})
     else:
       return Response({"status" : "Invalid credentials" }, status=status.HTTP_400_BAD_REQUEST)
-  
+
   @action(detail=False, methods=['put'], permission_classes=[])
   def register(self, request):
     if request.data.get('password') != request.data.get('rePassword'):
@@ -142,16 +142,36 @@ class UserViewSet(CreateListUpdateViewSet):
       return Response("That username is already taken", status=status.HTTP_400_BAD_REQUEST)
     except OperationalError:
       return Response("Something went wrong on our end, try again later", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-      
+
     return Response("User created!", status=status.HTTP_201_CREATED)
-  
+
 
 class BudgetViewSet(viewsets.ModelViewSet):
   queryset = Budget.objects.all()
-  serializer_class = BudgetSerializer 
+  serializer_class = BudgetSerializer
 
+
+  @action(detail=False, methods=['get'])
+  def income(self, request):
+    user = request.user
+    if user == AnonymousUser:
+        return Response(data="Could not identfy user", status=status.HTTP_401_UNAUTHORIZED)
+    budget = Budget.objects.get(owner=user)
+    if request.method == 'GET':
+        serializer = BudgetSerializer(instance=budget, context={'request': request})
+        return Response(serializer.data)
+
+  @action(detail=False, methods=['get'])
+  def expenses(self, request):
+    user = request.user
+    if user == AnonymousUser:
+        return Response(data="Could not identfy user", status=status.HTTP_401_UNAUTHORIZED)
+    budget = Budget.objects.get(owner=user)
+    expenses = Expense.objects.filter(budget=budget)
+    if request.method == 'GET':
+        serializer = ExpenseSerializer(instance=expenses, context={'request': request}, many=True)
+        return Response(serializer.data)
 
 class StocksViewSet(viewsets.ModelViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
-  

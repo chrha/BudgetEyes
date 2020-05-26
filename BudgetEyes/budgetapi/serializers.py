@@ -4,8 +4,13 @@ from .models import Budget, Stock ,Expense, Profile
 
 
 
+class ExpenseSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Expense
+    fields ='__all__'
+
 class BudgetSerializer(serializers.HyperlinkedModelSerializer):
-  owner = serializers.ReadOnlyField(source='owner.username')
 
   class Meta:
     model = Budget
@@ -18,11 +23,6 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
     model = Stock
     fields = ['name', 'value']
 
-class ExpenseSerializer(serializers.HyperlinkedModelSerializer):
-
-  class Meta:
-    model = Expense
-    fields = '__all__'
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -53,7 +53,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Profile
     fields = ['birth_date', 'bio', 'city', 'userinfo', 'stocks']
-  
+
   def get_userinfo(self, obj):
     user = obj.user
     return {
