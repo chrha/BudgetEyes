@@ -135,9 +135,10 @@ class UserViewSet(CreateListUpdateViewSet):
   def register(self, request):
     if request.data.get('password') != request.data.get('rePassword'):
       return Response("Passwords do not match", status=status.HTTP_400_BAD_REQUEST)
-    data = {k:v for k,v in request.data.items() if not k == 'rePassword'} 
+    data = {k:v for k,v in request.data.items() if not k == 'rePassword'}
     try:
       user = User.objects.create_user(**data)
+      budget = Budget.objects.create(owner=user)
     except IntegrityError:
       return Response("That username is already taken", status=status.HTTP_400_BAD_REQUEST)
     except OperationalError:
@@ -146,12 +147,12 @@ class UserViewSet(CreateListUpdateViewSet):
     return Response("User created!", status=status.HTTP_201_CREATED)
 
 
-class BudgetViewSet(viewsets.ModelViewSet):
+class BudgetViewSet(CreateListUpdateViewSet):
   queryset = Budget.objects.all()
   serializer_class = BudgetSerializer
 
 
-  @action(detail=False, methods=['get'])
+  @action(detail=False, methods=['get', 'put'], permission_classes=[])
   def income(self, request):
     user = request.user
     if user == AnonymousUser:
@@ -160,8 +161,14 @@ class BudgetViewSet(viewsets.ModelViewSet):
     if request.method == 'GET':
         serializer = BudgetSerializer(instance=budget, context={'request': request})
         return Response(serializer.data)
+    elif request.method == 'PUT':
+      data = request.data
+      budget.income = data.get('income')
+      budget.save()
+    return Response("Yet to do")
 
-  @action(detail=False, methods=['get'])
+
+  @action(detail=False, methods=['get', 'put'])
   def expenses(self, request):
     user = request.user
     if user == AnonymousUser:
@@ -171,11 +178,19 @@ class BudgetViewSet(viewsets.ModelViewSet):
     if request.method == 'GET':
         serializer = ExpenseSerializer(instance=expenses, context={'request': request}, many=True)
         return Response(serializer.data)
+    elif request.method == 'PUT':
+        Expense.objects.filter(budget=budget).delete()
+        data = request.data
+        expenses = data.get('expenses')
+        for e in expenses:
+            expense = Expense.objects.create(budget=budget, sum=e.get('value'), name=e.get('name'))
+    return Response("Yet to do")
+
 
 class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
-  
+
   @action(detail=False ,methods=['put'], permission_classes=[])
   def query(self, request):
     data = request.data
@@ -188,7 +203,7 @@ class StocksViewSet(CreateListUpdateViewSet):
       tickers = [s.abbriev for s in stocks.all()]
     else:
       tickers = data.get('stocks')
-    
+
     period = data.get('period', 7)
     data = get_historical(tickers=tickers, period=period)
     if len(tickers) == 1:
@@ -197,6 +212,3 @@ class StocksViewSet(CreateListUpdateViewSet):
       parsed_data = parse_stock_data(data)
 
     return Response(parsed_data)
-    
-
-

@@ -33,7 +33,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Budget(models.Model):
   owner = models.OneToOneField(User, related_name='budgetowner', on_delete=models.CASCADE)
-  income = models.IntegerField(blank=True)
+  income = models.IntegerField(null=True)
 
 class Expense(models.Model):
   budget = models.ForeignKey(Budget, on_delete=models.CASCADE)

@@ -15,6 +15,7 @@
         v-for="expense in firstExpense"
         v-bind:key="expense.id"
         v-bind:label="$value(expense.name)"
+        v-model="expense.value"
         @change="expense.value = $event">
 
         <template slot="append">
@@ -37,6 +38,7 @@
           v-for="expense in restExpenses"
           v-bind:key="expense.id"
           v-bind:label="$value(expense.name)"
+          v-model="expense.value"
           @change="expense.value = $event">
 
             <template slot="append">
@@ -53,7 +55,11 @@
           </v-text-field>
         </div>
 
-      <v-btn small v-on:click="fetchData">Load your saved income and expenses</v-btn> <br> <br>
+      <v-btn small v-if="showFetch" v-on:click="fetchData">
+        Load your saved income and expenses</v-btn>
+      <v-btn small v-if="showSave" v-on:click="saveData">Save your income and expenses</v-btn>
+
+      <br> <br>
       <v-btn small v-on:click="calculateBudget">Calculate Budget</v-btn>
       <v-divider light ></v-divider>
       <div
@@ -143,7 +149,42 @@ export default {
         },
       ],
       showResult: false,
+      showFetch: false,
+      showSave: false,
     };
+  },
+  created() {
+    axiosInstance.get('budget/income/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      .then((response) => {
+        if (response.data.income === null) {
+          this.showFetch = false;
+          this.showSave = true;
+        } else {
+          this.showFetch = true;
+          this.showSave = false;
+        }
+      }).catch((error) => {
+        this.showFetch = false;
+        this.showSave = false;
+        // eslint-disable-next-line
+        console.log(error);
+      });
+    axiosInstance.get('budget/expenses/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      .then((response) => {
+        if (response.data) {
+          this.showFetch = this.showFetch || false;
+          this.showSave = this.showSave && true;
+        } else {
+          console.log(response);
+          this.showFetch = true;
+          this.showSave = false;
+        }
+      }).catch((error) => {
+        this.showFetch = false;
+        this.showSave = false;
+        // eslint-disable-next-line
+        console.log(error);
+      });
   },
   computed: {
     firstExpense() {
@@ -154,17 +195,58 @@ export default {
     },
   },
   methods: {
+    saveData() {
+      let data = {
+        income: this.income,
+      };
+      axiosInstance.put('budget/income/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then(() => {
+        }).catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        });
+
+      data = {
+        expenses: this.expenses,
+      };
+      axiosInstance.put('budget/expenses/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          console.log(response.data);
+        }).catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+        });
+    },
     fetchData() {
       axiosInstance.get('budget/income/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then((response) => {
           this.income = response.data.income;
+          this.showFetch = false;
+          this.showSave = true;
         }).catch((error) => {
         // eslint-disable-next-line
         console.log(error);
         });
       axiosInstance.get('budget/expenses/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then((response) => {
-          console.log(response.data);
+          this.expenses = [
+            {
+              name: 'Expense',
+              value: response.data[0].sum,
+              first: 'true',
+              type: 'Need',
+            },
+          ];
+          for (let i = 1; i < response.data.length; i += 1) {
+            this.expenses.push({
+              name: 'Expense',
+              value: response.data[i].sum,
+              first: 'false',
+              type: 'Need',
+            });
+            this.showFetch = false;
+            this.showSave = true;
+          }
         }).catch((error) => {
         // eslint-disable-next-line
         console.log(error);
