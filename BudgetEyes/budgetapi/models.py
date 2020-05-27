@@ -8,7 +8,9 @@ from django.dispatch import receiver
 
 class Stock(models.Model):
   name = models.CharField(max_length=30, unique=True)
-  value = models.IntegerField()
+  value = models.IntegerField(null=True)
+  abbriev = models.CharField(max_length=10, unique=True)
+
 
 class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
