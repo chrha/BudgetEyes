@@ -4,12 +4,6 @@ from .models import Budget, Stock ,Expense, Profile
 
 
 
-class ExpenseSerializer(serializers.ModelSerializer):
-
-  class Meta:
-    model = Expense
-    fields ='__all__'
-
 class BudgetSerializer(serializers.HyperlinkedModelSerializer):
 
   class Meta:
@@ -23,6 +17,11 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
     model = Stock
     fields = ['name', 'value']
 
+class ExpenseSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Expense
+    fields = '__all__'
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
