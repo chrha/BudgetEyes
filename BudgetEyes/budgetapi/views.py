@@ -200,6 +200,8 @@ class StocksViewSet(CreateListUpdateViewSet):
         return Response("User not logged in, yet does not specify which stocks to see", status=status.HTTP_400_BAD_REQUEST)
       prof = Profile.objects.get(user=user)
       stocks = prof.stocks
+      if not stocks.all():
+        return Response("You are not following any stocks", status=status.HTTP_204_NO_CONTENT)
       tickers = [s.abbriev for s in stocks.all()]
     else:
       tickers = data.get('stocks')
