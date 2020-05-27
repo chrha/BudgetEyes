@@ -1,6 +1,6 @@
 # How to setup the app:
 
-## Install python 3.8
+## Install python >3.6
 ## Install nodejs@latest
 
 ## Install pipenv:
