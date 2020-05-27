@@ -14,6 +14,7 @@ from rest_framework.authtoken.models import Token
 from .models import Budget, Stock, Profile, Expense
 from .serializers import BudgetSerializer, StockSerializer, UserSerializer, ProfileSerializer, ExpenseSerializer
 from .viewsets import CreateListUpdateViewSet
+from .api import get_historical, parse_stock_data
 
 # Create your views here.
 """
@@ -119,7 +120,6 @@ class UserViewSet(CreateListUpdateViewSet):
   @action(detail=False, methods=['put'], permission_classes=[])
   def login(self, request):
     data = request.data
-    print(data)
     user = authenticate(username=data.get('username'), password=data.get('password'))
     if user:
       token = Token.objects.filter(user=user)
@@ -172,6 +172,31 @@ class BudgetViewSet(viewsets.ModelViewSet):
         serializer = ExpenseSerializer(instance=expenses, context={'request': request}, many=True)
         return Response(serializer.data)
 
-class StocksViewSet(viewsets.ModelViewSet):
+class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
+  
+  @action(detail=False ,methods=['put'], permission_classes=[])
+  def query(self, request):
+    data = request.data
+    user = request.user
+    if data.get('stocks') is None:
+      if user == AnonymousUser:
+        return Response("User not logged in, yet does not specify which stocks to see", status=status.HTTP_400_BAD_REQUEST)
+      prof = Profile.objects.get(user=user)
+      stocks = prof.stocks
+      tickers = [s.abbriev for s in stocks.all()]
+    else:
+      tickers = data.get('stocks')
+    
+    period = data.get('period', 7)
+    data = get_historical(tickers=tickers, period=period)
+    if len(tickers) == 1:
+      parsed_data = parse_stock_data(data, tickers[0])
+    else:
+      parsed_data = parse_stock_data(data)
+
+    return Response(parsed_data)
+    
+
+
