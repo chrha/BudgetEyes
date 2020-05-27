@@ -66,40 +66,51 @@
       v-if="showResult">
         <div class="result">
 
+        <h2 class="head">Need</h2>
         <v-progress-linear
           color="deep-orange"
           height="20"
+          rounded=true
           v-model="budget[0].procentage"
           striped
-        ></v-progress-linear>
+        >
+          <template v-slot="{ value }">
+            <strong>{{ Math.ceil(value) }}%</strong>
+          </template>
+        </v-progress-linear>
         <p>
-          Need <br>
           Used: {{budget[0].used}} <br>
           Limit: {{budget[0].limit}} <br>
         </p>
-        <br>
-
+        <h2 class="head">Want</h2>
         <v-progress-linear
-          color="light-blue"
+          color="blue"
           height="20"
+          rounded=true
           v-model="budget[1].procentage"
           striped
-        ></v-progress-linear>
+        >
+          <template v-slot="{ value }">
+            <strong>{{ Math.ceil(value) }}%</strong>
+          </template>
+        </v-progress-linear>
         <p>
-          Want <br>
           Used: {{budget[1].used}} <br>
           Limit: {{budget[1].limit}} <br>
         </p>
-        <br>
-
+        <h2 class="head">Savings</h2>
         <v-progress-linear
-          color="lime"
+          color="deep-purple accent-4"
           height="20"
+          rounded=true
           v-model="budget[2].procentage"
           striped
-        ></v-progress-linear>
+        >
+        <template v-slot="{ value }">
+          <strong>{{ Math.ceil(value) }}%</strong>
+        </template>
+        </v-progress-linear>
         <p>
-          Savings <br>
           Used: {{budget[2].used}} <br>
           Limit: {{budget[2].limit}} <br>
         </p>
@@ -229,6 +240,7 @@ export default {
         });
       axiosInstance.get('budget/expenses/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then((response) => {
+          this.count = 1;
           this.expenses = [
             {
               name: 'Expense',
@@ -238,6 +250,7 @@ export default {
             },
           ];
           for (let i = 1; i < response.data.length; i += 1) {
+            this.count += 1;
             this.expenses.push({
               name: 'Expense',
               value: response.data[i].sum,
@@ -315,5 +328,8 @@ export default {
 <style scoped>
 .text-right{
   margin-top:30px;
+}
+.head{
+  text-align: left;
 }
 </style>
