@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div v-if="this.$store.state.username">
-      <span> Hey {{ $store.state.username }}! You are following these stocks: </span>
+      <span> Hey {{ $store.state.username }}! {{ welcomeMsg }}  </span>
     </div>
     <div v-else-if="user">
       <span> Bye {{ user }}, do come back again! </span>
@@ -35,13 +35,18 @@ export default {
     return {
       user: this.previous,
       stocks: {},
+      welcomeMsg: 'You are following these stocks:',
     };
   },
   mounted() {
     if (this.$store.state.username) {
       axiosInstance.put('stocks/query/', { period: 10 }, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then((response) => {
-          this.stocks = response.data;
+          if (response.status === 204) {
+            this.welcomeMsg = 'You are currently not following any stocks, check them out at the stock page!';
+          } else {
+            this.stocks = response.data;
+          }
         }).catch((error) => {
           // eslint-disable-next-line
           console.log(error);
