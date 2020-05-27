@@ -16,6 +16,7 @@ node_modules
 /dist
 __pycache__/
 BudgetEyes/budgetapi/media
+stocks.json
 
 # local env files
 .env.local
