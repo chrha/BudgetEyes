@@ -207,10 +207,17 @@ class StocksViewSet(CreateListUpdateViewSet):
       tickers = data.get('stocks')
 
     period = data.get('period', 7)
+    if period == 1:
+      is_daily = True
+    else:
+      is_daily = False
+
     data = get_historical(tickers=tickers, period=period)
     if len(tickers) == 1:
-      parsed_data = parse_stock_data(data, tickers[0])
+      parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)
     else:
-      parsed_data = parse_stock_data(data)
+      parsed_data = parse_stock_data(data, is_daily=is_daily)
 
+    if not parsed_data:
+      return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(parsed_data)

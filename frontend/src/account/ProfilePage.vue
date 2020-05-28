@@ -45,7 +45,8 @@
               </v-list-item>
             </v-card>
             <v-form v-show="editMode"
-            ref="form">
+            ref="form"
+            >
               <v-text-field
               v-model="profile.name"
               label="Name"
