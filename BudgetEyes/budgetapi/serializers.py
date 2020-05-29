@@ -15,7 +15,7 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
 
   class Meta:
     model = Stock
-    fields = ['name', 'value']
+    fields = ['name', 'abbriev']
 
 class ExpenseSerializer(serializers.ModelSerializer):
 

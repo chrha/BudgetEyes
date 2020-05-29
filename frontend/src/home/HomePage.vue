@@ -17,7 +17,7 @@
       height="6"
     ></v-progress-linear>
     <v-row v-for="(stocklist, key) in stocks" :key="key" class="m-3" 
-      style="float:left" justify="center">
+      style="float:left">
       <StockGraph :stockData="stocklist" :isDaily="false" :stockName="key"/>
     </v-row>
   </v-container>

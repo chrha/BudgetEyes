@@ -3,9 +3,17 @@
     <v-container fluid> 
       <v-row>
         <v-col>
-          <h2> Followed Stocks </h2>
-          <h4 v-for="item in followedStocks" :key="item"> {{item.name}} </h4> 
-          <h3> TODO: Retrieve the actual stock data in server and plot some pretty graphs here </h3>
+          <h2> Your followed Stocks: </h2>
+          <v-select 
+          v-model="chosenStock"
+          prepend-inner-icon='mdi-chart-line'
+          :items="getStockNames"
+          outlined
+          @change="getStockData"
+          > </v-select>
+          <v-container v-show="chosenStock" class="mx-auto">
+            <stockGraph :stockName="stockAbbriev" :stockData="stockData"/> 
+          </v-container>
 
         </v-col>
           <v-col>
@@ -99,9 +107,13 @@
 <script>
 
 import axiosInstance from '../ajax/client';
+import stockGraph from '../stocks/StockGraph.vue';
 
 export default {
   name: 'Profile',
+  components: {
+    stockGraph,
+  },
   data() {
     return {
       profile: {
@@ -115,40 +127,23 @@ export default {
       followedStocks: [],
       imgsrc: '',
       editMode: false,
+      chosenStock: '',
+      stockAbbriev: '',
       keys: ['Name', 'Birth Date', 'City', 'Email', 'Member since'],
       rules: [
         (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
       ],
-    };    
+      stockData: {},
+    };
   },
-  created() {
-    axiosInstance.get('auth/profile/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
-      .then((response) => {
-        this.profile.birthDate = response.data.birth_date;
-        this.bio = response.data.bio;
-        this.profile.name = `${response.data.userinfo.first_name} ${response.data.userinfo.last_name}`;
-        this.profile.city = response.data.city;
-        this.profile.email = response.data.userinfo.email;
-        this.profile.dateJoined = response.data.userinfo.date_joined;
-        this.followedStocks = response.data.stocks;
-        this.imgsrc = 'https://f0.pngfuel.com/png/340/956/profile-user-icon-png-clip-art.png';
-      }).catch((error) => {
-      // eslint-disable-next-line
-      console.log(error);
-      });
-    /*
-    axiosInstance.get('auth/profilepic/', 
-    { headers: { Authorization: `Token ${this.$store.state.token}` } })
-      .then((response) => {
-        console.log(response.data);
-        // this.imgsrc = `data:image/jpeg;base64,${data}`;
-        const reader = new FileReader();
-        reader.readAsBinaryString(response.data);
-        reader.onloadend = function () {
-          this.imgsrc = reader.result;
-        }; 
-      });
-      */
+  computed: {
+    getStockNames() {
+      const arr = [];
+      for (let i = 0; i < this.followedStocks.length; i += 1) {
+        arr.push(this.followedStocks[i].name);
+      }
+      return arr;
+    },
   },
   methods: {
     toggleEditMode() {
@@ -178,6 +173,45 @@ export default {
     hexToBase64(str) {
       return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, '').replace(/([\da-fA-F]{2}) ?/g, '0x$1 ').replace(/ +$/, '').split(' ')));
     },
+    getStockData() {
+      const stock = this.followedStocks.find((elem) => elem.name === this.chosenStock).abbriev;
+      this.stockAbbriev = stock;
+      axiosInstance.put('stocks/query/', { stocks: [stock] })
+        .then((response) => {
+          this.stockData = response.data[stock];
+        }).catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+    axiosInstance.get('auth/profile/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      .then((response) => {
+        this.profile.birthDate = response.data.birth_date;
+        this.bio = response.data.bio;
+        this.profile.name = `${response.data.userinfo.first_name} ${response.data.userinfo.last_name}`;
+        this.profile.city = response.data.city;
+        this.profile.email = response.data.userinfo.email;
+        this.profile.dateJoined = response.data.userinfo.date_joined;
+        this.followedStocks = response.data.stocks;
+        this.imgsrc = 'https://f0.pngfuel.com/png/340/956/profile-user-icon-png-clip-art.png';
+      }).catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      });
+    /*
+    axiosInstance.get('auth/profilepic/', 
+    { headers: { Authorization: `Token ${this.$store.state.token}` } })
+      .then((response) => {
+        console.log(response.data);
+        // this.imgsrc = `data:image/jpeg;base64,${data}`;
+        const reader = new FileReader();
+        reader.readAsBinaryString(response.data);
+        reader.onloadend = function () {
+          this.imgsrc = reader.result;
+        }; 
+      });
+      */
   },
 };
 

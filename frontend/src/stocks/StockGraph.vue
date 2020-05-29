@@ -38,7 +38,7 @@
         color="white"
         item-color="black"
         background-color="deep-purple darken-1"
-        @change="updateStockChart()"
+        @change="updateChartData()"
         >
         </v-select>
     </v-card-actions>
@@ -72,8 +72,9 @@ export default {
   },
   watch: {
     stockData() {
-      console.log('Some change?');
-      // this.updateStockChart();
+      this.stock = this.stockData;
+      this.period = '7';
+      this.updateChartData();
     },
   },
   data() {
@@ -100,7 +101,7 @@ export default {
     };
   },
   methods: {
-    updateStockChart() {
+    updateChartData() {
       const values = Object.values(this.model);
       if (!values.length) {
         return;
@@ -111,7 +112,7 @@ export default {
         index.push(values[i]);
       }
       this.chartData.push(index);
-      
+
       for (let i = 0; i < this.stock.Close.length; i += 1) {
         const tmparr = [];
         tmparr.push(this.stock.Close[i][0]);
@@ -127,8 +128,8 @@ export default {
       axiosInstance.put('stocks/query/', { stocks: [this.stockName], period })
         .then((response) => {
           this.loading = false;
-          this.stock = Object.assign(response.data[this.stockName], []);
-          this.updateStockChart();
+          this.stock = response.data[this.stockName];
+          this.updateChartData();
           this.$refs.graph.$refs.chart.style.display = 'block';
           this.dataNotFound = false;
         }).catch(() => {
@@ -136,12 +137,11 @@ export default {
           this.dataNotFound = true;
           this.loading = false;
         }).then(() => {
-
         });
     },  
   },
   mounted() {
-    this.updateStockChart();
+    this.updateChartData();
   },
 };
 </script>
