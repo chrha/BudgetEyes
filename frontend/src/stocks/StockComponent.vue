@@ -25,6 +25,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'StockComponent',
   data() {
@@ -43,6 +45,22 @@ export default {
   mounted() {
     this.$root.$emit('msg_from_stockcomp', this.curr_stock);
     this.$root.$on('msg_from_stocklog', (value) => {
+      let exists = false;
+      for (let i = 0; i < this.stocks.length; i += 1) {
+        if (this.stocks[i] === value) {
+          this.count = i;
+          this.curr_stock = this.stocks[this.count];
+          exists = true;
+          break;
+        }
+      }
+      if (!exists) {
+        this.stocks.push(value);
+        this.count = this.stocks.length - 1;
+        this.curr_stock = this.stocks[this.count];
+      }
+    });
+    this.$root.$on('msg_from_stocksearch', (value) => {
       let exists = false;
       for (let i = 0; i < this.stocks.length; i += 1) {
         if (this.stocks[i] === value) {
