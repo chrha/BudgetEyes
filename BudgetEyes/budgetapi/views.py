@@ -191,6 +191,46 @@ class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
 
+  @action(detail=False, methods=['get'], permission_classes=[])
+  def get_abbr(self, request):
+    stocks=[{"name": s.name, "abbr":s.abbriev} for s in Stock.objects.all()]
+    return Response(stocks, status=status.HTTP_200_OK)
+
+  @action(detail=False, methods=['put'], permission_classes=[])
+  def searches(self, request):
+    data = request.data
+
+    stock_name = request.data['stockname']
+    search_data=str(stock_name)
+    print(search_data)
+    try:
+      stock = Stock.objects.filter(name=search_data)
+      if(not stock):
+        print("Not here?")
+        stock = Stock.objects.filter(abbriev=search_data)
+        if(not stock):
+          return Response(data="Could not identfy stock",status=status.HTTP_204_NO_CONTENT)
+      tickers = [stock[0].abbriev]
+      print(tickers)
+      period = data.get('period', 7)
+
+      if period == 1:
+        is_daily = True
+      else:
+        is_daily = False
+      print(tickers)
+      data = get_historical(tickers=tickers, period=period)
+      if len(tickers) == 1:
+        parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)
+      else:
+        parsed_data = parse_stock_data(data, is_daily=is_daily)
+      if not parsed_data:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+      return Response(parsed_data)
+    except OperationalError:
+      return Response("Something went wrong on our end, try again later", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+  
   @action(detail=False ,methods=['put'], permission_classes=[])
   def query(self, request):
     data = request.data
@@ -211,7 +251,6 @@ class StocksViewSet(CreateListUpdateViewSet):
       is_daily = True
     else:
       is_daily = False
-
     data = get_historical(tickers=tickers, period=period)
     if len(tickers) == 1:
       parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)

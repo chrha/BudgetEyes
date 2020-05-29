@@ -79,6 +79,21 @@ export default {
         this.value = '';
       }
     });
+    this.$root.$on('msg_from_stocksearch', (shownStock) => {
+      this.disp_stock = shownStock;
+      let check = true;
+      Object.keys(this.followed_dropdown).forEach((index) => {
+        if (this.followed_dropdown[index].text === shownStock) {
+          this.followButton = 'Unfollow';
+          this.value = this.followed_dropdown[index].text;
+          check = false;
+        }
+      });
+      if (check) {
+        this.followButton = 'Follow';
+        this.value = '';
+      }
+    });
   },
   methods: {
     /**
