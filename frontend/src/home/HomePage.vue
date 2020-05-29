@@ -65,10 +65,10 @@ export default {
           console.log(error);
         });
     } else {
-      axiosInstance.put('stocks/query/', { stocks: ['MSFT', 'GOOG'], period: 7 })
+      axiosInstance.put('stocks/query/', { stocks: ['MSFT', 'GOOG', 'AAPL', 'KO', 'AMZN', 'FB'], period: 7 })
         .then((response) => { 
           this.loading = false;
-          this.stocks = Object.assign(response.data[this.stockName], this.stocks);
+          this.stocks = Object.assign(response.data, this.stocks);
         }).catch((error) => {
           this.welcomeMsg = 'Something went wrong, how embarrasing!';
           this.loading = false;

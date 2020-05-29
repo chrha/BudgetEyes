@@ -123,23 +123,20 @@ export default {
     },
     periodChange() {
       const period = Number(this.period);
-      console.log('Period:', period);
       this.loading = true;
       axiosInstance.put('stocks/query/', { stocks: [this.stockName], period })
         .then((response) => {
           this.loading = false;
-          console.log('Repsonse: ', response.data[this.stockName]);
           this.stock = Object.assign(response.data[this.stockName], []);
           this.updateStockChart();
           this.$refs.graph.$refs.chart.style.display = 'block';
           this.dataNotFound = false;
         }).catch(() => {
-          console.log(this.$refs);
           this.$refs.graph.$refs.chart.style.display = 'none';
           this.dataNotFound = true;
           this.loading = false;
         }).then(() => {
-          console.log('After request:', this.stock);
+
         });
     },  
   },

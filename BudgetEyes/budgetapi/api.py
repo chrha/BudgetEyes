@@ -39,7 +39,6 @@ def parse_stock_data(data, name='', is_daily=False):
         var = [[dates[i], values[i]] for i in range(len(dates))] 
         out[stock][col] = var
     else:
-
       if data.empty:
         return {}
         

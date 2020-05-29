@@ -217,7 +217,7 @@ class StocksViewSet(CreateListUpdateViewSet):
       parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)
     else:
       parsed_data = parse_stock_data(data, is_daily=is_daily)
-
+    
     if not parsed_data:
       return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(parsed_data)
