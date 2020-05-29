@@ -28,7 +28,7 @@ def test_parse_several():
 
 
 if __name__ == "__main__":
-  data = get_historical("GOOG")
-  parsed_data = parse_stock_data(data, "GOOG")
+  data = get_historical(["APEN", "BUL"], period=1)
+  parsed_data = parse_stock_data(data, "APEN", is_daily=True)
   print(parsed_data)
   

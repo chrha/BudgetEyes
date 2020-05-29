@@ -3,6 +3,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import VueCookies from 'vue-cookies';
 import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
+import VueGoogleCharts from 'vue-google-charts';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -15,6 +16,7 @@ import vuetify from './plugins/vuetify';
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueCookies);
+Vue.use(VueGoogleCharts);
 Vue.$cookies.config('1d');
 
 // Vue.use(VueAxios, axios);
