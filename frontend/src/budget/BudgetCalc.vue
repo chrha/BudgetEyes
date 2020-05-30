@@ -246,7 +246,7 @@ export default {
               name: 'Expense',
               value: response.data[0].sum,
               first: 'true',
-              type: 'Need',
+              type: response.data[0].type,
             },
           ];
           for (let i = 1; i < response.data.length; i += 1) {
@@ -255,7 +255,7 @@ export default {
               name: 'Expense',
               value: response.data[i].sum,
               first: 'false',
-              type: 'Need',
+              type: response.data[i].type,
             });
             this.showFetch = false;
             this.showSave = true;
