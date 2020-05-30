@@ -115,9 +115,9 @@ export default {
 
       for (let i = 0; i < this.stock.Close.length; i += 1) {
         const tmparr = [];
-        tmparr.push(this.stock.Close[i][0]);
+        tmparr.push(this.stock.Dates[i]);
         for (let j = 0; j < this.model.length; j += 1) { 
-          tmparr.push(this.stock[this.model[j]][i][1]);
+          tmparr.push(this.stock[this.model[j]][i]);
         }
         this.chartData.push(tmparr);
       }
@@ -136,7 +136,7 @@ export default {
           this.$refs.graph.$refs.chart.style.display = 'none';
           this.dataNotFound = true;
           this.loading = false;
-        }).then(() => {
+        }).finally(() => {
         });
     },  
   },

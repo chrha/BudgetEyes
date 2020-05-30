@@ -11,6 +11,7 @@ def get_historical(tickers, period=7):
   else:
     interval = "1d"
   data = download(tickers=tickers, period=period, interval=interval)
+  print(data)
   return data
 
 
@@ -25,34 +26,37 @@ def parse_stock_data(data, name='', is_daily=False):
   for col in keys:
     if isinstance(stocks, list):
       for stock in stocks:
-        dates = list(data[col][stock].index.to_pydatetime())
-
-        if is_daily:
-          dates = [date.strftime("%H:%M:%S") for date in dates]
-        else:
-          dates = [date.strftime("%Y-%m-%d") for date in dates]
+        if not out[stock].get('Dates'):
+          dates = list(data[col][stock].index.to_pydatetime())
+          if is_daily:
+            dates = [date.strftime("%H:%M:%S") for date in dates]
+          else:
+            dates = [date.strftime("%Y-%m-%d") for date in dates]
+        
+          out[stock]['Dates'] = dates
 
         ind = np.where(np.isnan(data[col][stock]))[0]
         values = list(data[col][stock].dropna())
         for i in ind[::-1]:
-          dates.pop(i)
-        var = [[dates[i], values[i]] for i in range(len(dates))] 
-        out[stock][col] = var
+          out[stock]['Dates'].pop(i)
+        out[stock][col] = values
+
     else:
       if data.empty:
         return {}
-        
-      dates = list(data[col].index.to_pydatetime())
-      if is_daily:
-        dates = [date.strftime("%H:%M:%S") for date in dates]
-      else:
-        dates = [date.strftime("%Y-%m-%d") for date in dates]
       
+      if not out[name].get('Dates'):
+        dates = list(data[col].index.to_pydatetime())
+        if is_daily:
+          dates = [date.strftime("%H:%M:%S") for date in dates]
+        else:
+          dates = [date.strftime("%Y-%m-%d") for date in dates]
+        out[name]['Dates'] = dates
+        
       ind = np.where(np.isnan(data[col]))[0]
       for i in ind[::-1]:
         del dates[i]
       values = list(data[col])
-      var = [[dates[i], values[i]] for i in range(len(dates))] 
-      out[stocks][col] = var
+      out[stocks][col] = values
   
   return out

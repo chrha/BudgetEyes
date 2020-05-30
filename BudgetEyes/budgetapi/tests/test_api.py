@@ -12,7 +12,7 @@ def test_parse_single():
   parsed_data = parse_stock_data(data, "MSFT")
   assert(len(parsed_data.keys()) == 1)
   assert("MSFT" in parsed_data.keys())
-  assert(len(parsed_data["MSFT"]) == 4)
+  assert(len(parsed_data["MSFT"]) == 5)
   
 
 def test_parse_several():
@@ -20,15 +20,16 @@ def test_parse_several():
   parsed_data = parse_stock_data(data)
   assert(list(parsed_data.keys()) == ["GOOG", "MSFT"])
   for stock in parsed_data:
-    assert(len(parsed_data[stock]) == 4)
-    assert(list(parsed_data[stock].keys()) == ["Open", "Close", "High", "Low"])
-    for key in parsed_data[stock]:
-      assert(len(parsed_data[stock][key])==7)
-  
+    assert(len(parsed_data[stock]) == 5)
+    assert(list(parsed_data[stock].keys()) == ["Dates", "Open", "Close", "High", "Low"])
+
+    #Check that all lists have the same length:
+    lists = parsed_data[stock].values()
+    it = iter(lists)
+    the_len = len(next(it))
+    assert(all(len(l) == the_len for l in it))
 
 
 if __name__ == "__main__":
-  data = get_historical(["APEN", "BUL"], period=1)
-  parsed_data = parse_stock_data(data, "APEN", is_daily=True)
-  print(parsed_data)
-  
+  data = get_historical(["GOOG"], period=1)
+  parsed_data = parse_stock_data(data, name='GOOG',is_daily=True)
