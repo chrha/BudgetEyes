@@ -22,7 +22,7 @@ export default new Vuex.Store({
   },
   getters: {
     getUsername: (state) => state.username,
-    getStockname: (state) => state.name_and_abbriev,
+    getStocks: (state) => state.name_and_abbriev,
   },
     
 });

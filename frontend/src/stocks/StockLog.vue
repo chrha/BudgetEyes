@@ -30,15 +30,16 @@
 
 
 <script>
+import axiosInstance from '../ajax/client';
+
+// import axiosInstance from '../ajax/client';
+
 export default {
   name: 'StockLog',
   data() { 
     return {
-      followed_dropdown: 
+      followed_dropdown:
           [
-            { text: 'stock1' },
-            { text: 'stock2' },
-            { text: 'stock4' },
           ],
       bought_dropdown: 
           [
@@ -64,6 +65,16 @@ export default {
    * for update on the displayed stock, and updates follow button.
    */
   mounted() {
+    axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i += 1) {
+          this.followed_dropdown.push({ text: response.data[i].name });
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+      });
     this.$root.$on('msg_from_stockcomp', (shownStock) => {
       this.disp_stock = shownStock;
       let check = true;
@@ -110,21 +121,26 @@ export default {
      */
     onFollow() {
       let key = 0;
+      
       Object.keys(this.followed_dropdown).forEach((i) => {
         if (this.followed_dropdown[i].text === this.disp_stock) {
           this.followButton = 'Unfollow';
           key = i;   
         }
-      }); 
-      if (this.followButton === 'Follow') {
-        this.followed_dropdown.push({ text: this.disp_stock });
-        this.value = this.disp_stock;
-        this.followButton = 'Unfollow';
-      } else if (this.followButton === 'Unfollow') {
-        this.followed_dropdown.splice(key, 1);
-        this.followButton = 'Follow';
-        this.value = '';
-      }
+      });
+      const data = { stock: this.disp_stock };
+      axiosInstance.put('stocks/handle_stocks/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then(() => {
+          if (this.followButton === 'Follow') {
+            this.followed_dropdown.push({ text: this.disp_stock });
+            this.value = this.disp_stock;
+            this.followButton = 'Unfollow';
+          } else if (this.followButton === 'Unfollow') {
+            this.followed_dropdown.splice(key, 1);
+            this.followButton = 'Follow';
+            // this.value = '';
+          }
+        });
     },
   },
 

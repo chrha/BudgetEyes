@@ -191,6 +191,29 @@ class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
 
+  @action(detail=False, methods=['get', 'put', 'delete'])
+  def handle_stocks(self, request):
+    user = request.user
+    prof = Profile.objects.get(user=user)
+    stocks = prof.stocks.all()
+    if request.method == 'GET':
+      if not stocks:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+      data = [StockSerializer(s).data for s in stocks]
+      return Response(data=data)
+    elif request.method == 'PUT':
+      s = request.data.get('stock')
+      stock = Stock.objects.get(name=s)
+      if stock in stocks:
+        prof.stocks.remove(stock)
+        return Response(status=status.HTTP_200_OK)
+      else:
+        prof.stocks.add(stock)
+        return Response(status=status.HTTP_200_OK)
+
+
+
+
   @action(detail=False, methods=['get'], permission_classes=[])
   def get_abbr(self, request):
     stocks=[{"name": s.name, "abbr":s.abbriev} for s in Stock.objects.all()]
