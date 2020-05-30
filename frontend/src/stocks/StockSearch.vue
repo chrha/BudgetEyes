@@ -45,7 +45,7 @@ export default {
     if (this.$store.getters.getStocks.length) {
       this.stockNameList = this.$store.getters.getStocks;
     } else {
-      axiosInstance.get('stocks/get_abbr/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      axiosInstance.get('stocks/get_abbr/')
         .then((response) => {
           const grid = response.data;
           this.$store.commit('setStocks', grid);
@@ -60,7 +60,7 @@ export default {
   methods: {
     SearchStock(searchStock) {
       const sendData = { stockname: searchStock };
-      axiosInstance.put('/stocks/searches/', sendData, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      axiosInstance.put('/stocks/searches/', sendData)
         .then((response) => {
           this.search_res = response.data[searchStock];
           this.$root.$emit('msg_from_stocksearch', this.search_res);

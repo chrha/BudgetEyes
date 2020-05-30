@@ -11,18 +11,11 @@
       mandatory
       @change="periodChange"
       >
-      <v-btn value='1'> Daily </v-btn>
-      <v-btn value='7'> Weekly </v-btn>
-      <v-btn value='30'> Monthly </v-btn>
+      <v-btn value='1' :loading="loadingDaily"> Daily </v-btn>
+      <v-btn value='7' :loading="loadingWeekly"> Weekly </v-btn>
+      <v-btn value='30' :loading="loadingMonthly"> Monthly </v-btn>
       </v-btn-toggle>
     </v-card-title>
-    <v-progress-linear
-      color="deep-purple accent-4"
-      :active="loading"
-      indeterminate
-      rounded
-      height="6"> 
-    </v-progress-linear>
     <v-card-actions>
         <v-select
         v-model="model"
@@ -85,7 +78,9 @@ export default {
       dataNotFound: false,
       chartData: [
       ],
-      loading: false,
+      loadingDaily: false,
+      loadingWeekly: false,
+      loadingMonthly: false,
       options: ['Close', 'Open', 'High', 'Low'],
       model: ['Close'],
       chartOptions: {
@@ -125,9 +120,15 @@ export default {
     periodChange() {
       const period = Number(this.period);
       this.loading = true;
+      if (period === 7) {
+        this.loadingWeekly = true;
+      } else if (period === 30) {
+        this.loadingMonthly = true;
+      } else {
+        this.loadingDaily = true;
+      }
       axiosInstance.put('stocks/query/', { stocks: [this.stockName], period })
         .then((response) => {
-          this.loading = false;
           this.stock = response.data[this.stockName];
           this.updateChartData();
           this.$refs.graph.$refs.chart.style.display = 'block';
@@ -135,8 +136,10 @@ export default {
         }).catch(() => {
           this.$refs.graph.$refs.chart.style.display = 'none';
           this.dataNotFound = true;
-          this.loading = false;
         }).finally(() => {
+          this.loadingMonthly = false;
+          this.loadingWeekly = false;
+          this.loadingDaily = false;
         });
     },  
   },
