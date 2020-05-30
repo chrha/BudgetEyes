@@ -38,3 +38,4 @@ class Expense(models.Model):
   budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
   name = models.CharField(max_length=30, blank=True)
   sum = models.IntegerField()
+  type= models.CharField(max_length=30, blank=True)

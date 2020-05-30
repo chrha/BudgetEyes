@@ -183,7 +183,7 @@ class BudgetViewSet(CreateListUpdateViewSet):
         data = request.data
         expenses = data.get('expenses')
         for e in expenses:
-            expense = Expense.objects.create(budget=budget, sum=e.get('value'), name=e.get('name'))
+            expense = Expense.objects.create(budget=budget, sum=e.get('value'), type=e.get('type'), name=e.get('name'))
     return Response("Yet to do")
 
 
@@ -253,7 +253,7 @@ class StocksViewSet(CreateListUpdateViewSet):
     except OperationalError:
       return Response("Something went wrong on our end, try again later", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-  
+
   @action(detail=False ,methods=['put'], permission_classes=[])
   def query(self, request):
     data = request.data
@@ -279,7 +279,7 @@ class StocksViewSet(CreateListUpdateViewSet):
       parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)
     else:
       parsed_data = parse_stock_data(data, is_daily=is_daily)
-    
+
     if not parsed_data:
       return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(parsed_data)
