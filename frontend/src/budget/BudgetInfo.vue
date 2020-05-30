@@ -4,6 +4,9 @@
     <v-card class="wise-words"
       width="600px"
       color="#effcef">
+      <v-card-title>
+        Don't neglect your budget!
+      </v-card-title>
       <v-card-text>
         Budgeting is important
         because it helps you accurately plan,

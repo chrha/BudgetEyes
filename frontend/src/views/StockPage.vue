@@ -1,31 +1,17 @@
+
+
 <template>
-  <div class="stockpage">
-      <b-container>
-        <b-row>
-          <b-col>
-            <StockSearch/>
-          </b-col>
-          <b-col cols="7">
-            <h1>{{title}}</h1>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <StockComponent/>
-          </b-col>
-          <b-col cols="7">
-            <StockInfo/>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col >
-            <StockLog/>
-          </b-col> 
-          <b-col cols="7">
-            
-          </b-col>  
-        </b-row>
-      </b-container>
+  <div class="budgetpage">
+    <div class="row">
+      <div class="graph">
+        <StockSearch/>
+        <StockComponent/>
+        <StockLog/>
+        </div>
+      <div class="inf">
+          <StockInfo/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,7 +32,6 @@ export default {
   },
   data() {
     return {
-      title: 'Interested in Stocks?',
     };
   },
   theme: {
@@ -57,4 +42,16 @@ export default {
 };
 </script>
 
+<style scoped>
+  .graph{
 
+     float: left;
+     margin: auto;
+  }
+  .inf{
+
+     float: left;
+     margin: auto;
+  }
+
+</style>
