@@ -1,21 +1,84 @@
 <template>
 <div id="stock-search">
-    <b-container>
-      <b-row>
-        <b-col  >
-             <v-text-field label="Enter stock name"></v-text-field>
-        </b-col>
-        <b-col>
-           <v-btn id= "stockSearchButton" >Search</v-btn>
-        </b-col>
-      </b-row>
-    </b-container>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            v-model="searchStock"
+            :items="stockNameList"
+            @keyup.enter="SearchStock(searchStock)"
+            :search-input.sync="search"
+            color="black"
+            :filter="nameAndAbbrFilter"
+            hide-no-data
+            hide-selected
+            cache-items
+            item-text="name"
+            item-value="abbr"
+            label="Search"
+            placeholder="Enter stock name"
+            prepend-icon="mdi-database-search"
+          ></v-autocomplete>
+        </v-col>
+        <v-col>
+           <v-btn id= "stockSearchButton" @click="SearchStock(searchStock)">Search</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
 </div>
 </template>
 
 <script>
+import axiosInstance from '../ajax/client';
+
 export default {
   name: 'StockSearch',
+  data() {
+    return {
+      searchStock: '',
+      search_res: '',
+      stockNameList: [],
+      search: null,
+    };
+  },
+  mounted() {
+    if (this.$store.getters.getStocks.length) {
+      this.stockNameList = this.$store.getters.getStocks;
+    } else {
+      axiosInstance.get('stocks/get_abbr/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          const grid = response.data;
+          this.$store.commit('setStocks', grid);
+          this.stockNameList = grid;
+          console.log(this.stockNameList);
+        }).catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    }
+  },
+  methods: {
+    SearchStock(searchStock) {
+      const sendData = { stockname: searchStock };
+      axiosInstance.put('/stocks/searches/', sendData, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          this.search_res = response.data[searchStock];
+          this.$root.$emit('msg_from_stocksearch', this.search_res);
+        }).catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
+    nameAndAbbrFilter(item, queryText) {
+      const name = item.name.toLowerCase();
+      const abbr = item.abbr.toLowerCase();
+      const searchText = queryText.toLowerCase();
+
+
+      return searchText.length > 1 && (name.indexOf(searchText) > -1
+        || abbr.indexOf(searchText) > -1);
+    },
+  },
 };
 </script>
 

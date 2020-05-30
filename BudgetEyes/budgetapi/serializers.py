@@ -11,11 +11,11 @@ class BudgetSerializer(serializers.HyperlinkedModelSerializer):
     fields = '__all__'
 
 
-class StockSerializer(serializers.HyperlinkedModelSerializer):
+class StockSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Stock
-    fields = ['name', 'abbriev']
+    fields = '__all__'
 
 class ExpenseSerializer(serializers.ModelSerializer):
 

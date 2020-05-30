@@ -65,6 +65,16 @@ export default {
    * for update on the displayed stock, and updates follow button.
    */
   mounted() {
+    axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i += 1) {
+          this.followed_dropdown.push({ text: response.data[i].name });
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line
+        console.log(error);
+      });
     this.$root.$on('msg_from_stockcomp', (shownStock) => {
       this.disp_stock = shownStock;
       let check = true;
@@ -80,15 +90,21 @@ export default {
         this.value = '';
       }
     });
-    axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
-      .then((response) => {
-        for (let i = 0; i < response.data.length; i += 1) {
-          this.followed_dropdown.push({ text: response.data[i].name });
+    this.$root.$on('msg_from_stocksearch', (shownStock) => {
+      this.disp_stock = shownStock;
+      let check = true;
+      Object.keys(this.followed_dropdown).forEach((index) => {
+        if (this.followed_dropdown[index].text === shownStock) {
+          this.followButton = 'Unfollow';
+          this.value = this.followed_dropdown[index].text;
+          check = false;
         }
-      })
-      .catch((error) => {
-        console.log(error);
       });
+      if (check) {
+        this.followButton = 'Follow';
+        this.value = '';
+      }
+    });
   },
   methods: {
     /**
