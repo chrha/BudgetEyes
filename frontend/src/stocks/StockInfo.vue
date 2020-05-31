@@ -1,16 +1,16 @@
 <template>
     <div id='stock-info'>
       <v-card class="text-left"
-      width="600px"
+      width="800px"
       color="#effcef">
-        <v-card-title>
+        <v-card-title class="justify-center">
           Interested in Stocks?
         </v-card-title>
-         <v-card-text class="stock-info">
+         <v-card-text class="stock-info" style="font-size: 20px">
            It is highly pleasant and efficient to be able to have an overview of
            stocks that you may be interested in, in a single place.
            This page provides such functionality where you can search for particular stocks,
-           browse some of the more popular ones and log stocks you are interested in.
+           and follow stocks you are interested in.
          </v-card-text>
      </v-card>
     </div>

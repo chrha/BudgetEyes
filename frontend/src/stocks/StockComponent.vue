@@ -1,41 +1,33 @@
 <template>
 <div id="stockpage">
-    <b-container id="stock-canvas">
-        <b-row>
-            <b-col>
-              <h1> {{ curr_stock }} </h1>  
-            </b-col>
+    <v-container id="stock-canvas">
 
-        </b-row>
-
-        <b-row>
-            
-            <b-col cols >
-                <v-btn id= "previousButton" v-on:click="previousStock">Previous</v-btn>
-            </b-col>
-            
-            <b-col cols>
-                <v-btn id= "nextButton" v-on:click="nextStock">Next</v-btn>
-               
-            </b-col>
-        </b-row>    
-    </b-container>
+        <v-row v-if="curr_stock">
+          <stockGraph :stockData="curr_stock_data" :stockName="curr_stock_abbr"/>
+        </v-row>
+   </v-container>
     
 </div>
 </template>
 
 <script>
 
+import stockGraph from './StockGraph.vue';
+import axiosInstance from '../ajax/client';
 
 export default {
   name: 'StockComponent',
+  components: {
+    stockGraph,
+  },
   data() {
     return {
-      stocks: ['stock1',
-        'stock2', 
-        'stock3', 'stock6'],
+      stocks: [],
       count: 0,
-      curr_stock: 'stock1',
+      curr_stock: '',
+      curr_stock_data: {},
+      curr_stock_abbr: '',
+      
     };
   },
   /**
@@ -45,36 +37,24 @@ export default {
   mounted() {
     this.$root.$emit('msg_from_stockcomp', this.curr_stock);
     this.$root.$on('msg_from_stocklog', (value) => {
-      let exists = false;
-      for (let i = 0; i < this.stocks.length; i += 1) {
-        if (this.stocks[i] === value) {
-          this.count = i;
-          this.curr_stock = this.stocks[this.count];
-          exists = true;
-          break;
-        }
+      const data = this.$store.getters.getStockDataByAbbr(value.abbriev);
+      if (data) {
+        this.curr_stock_data = data;
+      } else {
+        axiosInstance.put('stocks/query/', { stocks: [value.abbriev] })
+          .then((response) => {
+            this.curr_stock_data = response.data[value.abbriev];
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.log(error);
+          });
       }
-      if (!exists) {
-        this.stocks.push(value);
-        this.count = this.stocks.length - 1;
-        this.curr_stock = this.stocks[this.count];
-      }
+      this.curr_stock_abbr = value.abbriev;
+      this.curr_stock = value.name;
     });
     this.$root.$on('msg_from_stocksearch', (value) => {
-      let exists = false;
-      for (let i = 0; i < this.stocks.length; i += 1) {
-        if (this.stocks[i] === value) {
-          this.count = i;
-          this.curr_stock = this.stocks[this.count];
-          exists = true;
-          break;
-        }
-      }
-      if (!exists) {
-        this.stocks.push(value);
-        this.count = this.stocks.length - 1;
-        this.curr_stock = this.stocks[this.count];
-      }
+      [this.curr_stock, this.curr_stock_abbr, this.curr_stock_data] = value;
     });
   },
   methods: {
@@ -102,6 +82,10 @@ export default {
       this.curr_stock = this.stocks[this.count];
       this.$root.$emit('msg_from_stockcomp', this.curr_stock);
     },
+  },
+  beforeDestroy() {
+    this.$root.$off('msg_from_stocklog');
+    this.$root.$off('msg_from_stocksearch');
   },
 };
 </script>

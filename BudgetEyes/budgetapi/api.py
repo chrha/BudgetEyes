@@ -13,7 +13,6 @@ def get_historical(tickers, period=7):
   else:
     interval = "1d"
   data = download(tickers=tickers, period=period, interval=interval)
-  print(data)
   return data
 
 

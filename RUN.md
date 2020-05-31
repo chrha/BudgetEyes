@@ -14,6 +14,14 @@
 > `cd frontend`
 > `npm install`
 
+## Add stocks to database:
+
+> `cd Budgeteyes/scripts`
+> `python stock_to_json.py`
+> `cd ..`
+> `./manage.py loaddata stocks.json`
+ 
+
 # How to run the app:
 
 ## In one terminal:

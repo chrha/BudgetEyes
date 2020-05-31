@@ -186,7 +186,6 @@ export default {
           this.showFetch = this.showFetch || false;
           this.showSave = this.showSave && true;
         } else {
-          console.log(response);
           this.showFetch = true;
           this.showSave = false;
         }
@@ -221,8 +220,7 @@ export default {
         expenses: this.expenses,
       };
       axiosInstance.put('budget/expenses/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
         }).catch((error) => {
         // eslint-disable-next-line
         console.log(error);
