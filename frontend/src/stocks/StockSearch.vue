@@ -18,6 +18,7 @@
             label="Search"
             placeholder="Enter stock name"
             prepend-icon="mdi-database-search"
+            return-object
           ></v-autocomplete>
         </v-col>
         <v-col>
@@ -50,7 +51,6 @@ export default {
           const grid = response.data;
           this.$store.commit('setStocks', grid);
           this.stockNameList = grid;
-          console.log(this.stockNameList);
         }).catch((error) => {
           // eslint-disable-next-line
           console.log(error);
@@ -59,11 +59,11 @@ export default {
   },
   methods: {
     SearchStock(searchStock) {
-      const sendData = { stockname: searchStock };
-      axiosInstance.put('/stocks/searches/', sendData)
+      const sendData = { stocks: [searchStock.abbr] };
+      axiosInstance.put('/stocks/query/', sendData)
         .then((response) => {
-          this.search_res = response.data[searchStock];
-          this.$root.$emit('msg_from_stocksearch', this.search_res);
+          this.search_res = response.data[searchStock.abbr];
+          this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, this.search_res]);
         }).catch((error) => {
           // eslint-disable-next-line
           console.log(error);

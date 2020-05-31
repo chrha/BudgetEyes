@@ -1,18 +1,18 @@
 
 
 <template>
-  <div class="budgetpage">
-    <div class="row">
-      <div class="graph">
+  <v-container fluid class="budgetpage">
+    <v-row class="row">
+      <v-col class="graph">
         <StockSearch/>
         <StockComponent/>
-        <StockLog/>
-        </div>
-      <div class="inf">
+        <StockLog v-show="this.$store.state.username"/>
+      </v-col>
+      <v-col class="inf">
           <StockInfo/>
-      </div>
-    </div>
-  </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

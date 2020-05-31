@@ -4,11 +4,16 @@
             <v-row class="mb-5">
                 <v-col>
                   <v-btn id= "followButton" 
-                  v-on:click="onFollow()"> {{followButton}}</v-btn>
+                  v-on:click="onFollow()"
+                  :disabled="buttonDisabled"
+                  absolute
+                  left
+                  width="410px"
+                  > 
+                    {{followButton}}
+                  </v-btn>
                 </v-col>
-
             </v-row>
-
             <v-row>
                 <v-col >
                     <v-overflow-btn
@@ -18,7 +23,9 @@
                         :items="followed_dropdown"
                         label="Followed Stocks"
                         editable
-                        item-value="text"
+                        item-text="name"
+                        item-value="abbriev"
+                        width="420px"
                     ></v-overflow-btn>           
                 </v-col>
             </v-row>
@@ -28,36 +35,20 @@
     </div>
 </template>
 
-
 <script>
 import axiosInstance from '../ajax/client';
 
-// import axiosInstance from '../ajax/client';
 
 export default {
   name: 'StockLog',
   data() { 
     return {
-      followed_dropdown:
-          [
-          ],
-      bought_dropdown: 
-          [
-            { text: 'bought1' },
-            { text: 'bought2' },
-            { text: 'bought3' },
-          ],
-      available_stocks:
-        [
-          { text: 'stock1' },
-          { text: 'stock2' },
-          { text: 'stock3' },
-          { text: 'stock4' },
-          { text: 'stock5' },
-        ],
+      followed_dropdown: [],
       value: '',
       disp_stock: '',
+      disp_stock_name: '',
       followButton: 'Follow',
+      buttonDisabled: false,
     };
   },
   /**
@@ -67,9 +58,7 @@ export default {
   mounted() {
     axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
       .then((response) => {
-        for (let i = 0; i < response.data.length; i += 1) {
-          this.followed_dropdown.push({ text: response.data[i].name });
-        }
+        this.followed_dropdown = response.data;
       })
       .catch((error) => {
         // eslint-disable-next-line
@@ -77,11 +66,12 @@ export default {
       });
     this.$root.$on('msg_from_stockcomp', (shownStock) => {
       this.disp_stock = shownStock;
+      
       let check = true;
       Object.keys(this.followed_dropdown).forEach((index) => {
         if (this.followed_dropdown[index].text === shownStock) {
           this.followButton = 'Unfollow';
-          this.value = this.followed_dropdown[index].text;
+          this.value = this.followed_dropdown[index].abbriev;
           check = false;
         }
       });
@@ -91,7 +81,7 @@ export default {
       }
     });
     this.$root.$on('msg_from_stocksearch', (shownStock) => {
-      this.disp_stock = shownStock;
+      [this.disp_stock_name, this.disp_stock] = shownStock;
       let check = true;
       Object.keys(this.followed_dropdown).forEach((index) => {
         if (this.followed_dropdown[index].text === shownStock) {
@@ -111,39 +101,45 @@ export default {
      * updates followbutton and dropdown display value, which is sent to StockComponent
      */
     onChange(value) {
+      const data = this.followed_dropdown.find((element) => element.abbriev === value);
       this.followButton = 'Unfollow';
-      this.disp_stock = value;
-      this.$root.$emit('msg_from_stocklog', value);
-    },
+      this.disp_stock = data.abbriev;
+      this.disp_stock_name = data.name;
+      
+      this.$root.$emit('msg_from_stocklog', data);
+    },  
     /**
      * Iterates dropdown list items and updates button whether
      *  to be able to remove or add displayed item to the list.
      */
     onFollow() {
       let key = 0;
+      this.buttonDisabled = true;
       
       Object.keys(this.followed_dropdown).forEach((i) => {
-        if (this.followed_dropdown[i].text === this.disp_stock) {
+        if (this.followed_dropdown[i].abbriev === this.disp_stock) {
           this.followButton = 'Unfollow';
-          key = i;   
-        }
+          key = i;
+        } 
       });
       const data = { stock: this.disp_stock };
+      
       axiosInstance.put('stocks/handle_stocks/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then(() => {
           if (this.followButton === 'Follow') {
-            this.followed_dropdown.push({ text: this.disp_stock });
+            this.followed_dropdown.push({ name: this.disp_stock_name, abbriev: this.disp_stock });
             this.value = this.disp_stock;
             this.followButton = 'Unfollow';
           } else if (this.followButton === 'Unfollow') {
             this.followed_dropdown.splice(key, 1);
             this.followButton = 'Follow';
-            // this.value = '';
+            this.value = '';
           }
+        }).finally(() => {
+          this.buttonDisabled = false;
         });
     },
   },
-
 };
 </script>
 

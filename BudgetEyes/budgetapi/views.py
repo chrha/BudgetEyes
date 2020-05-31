@@ -194,16 +194,18 @@ class StocksViewSet(CreateListUpdateViewSet):
   @action(detail=False, methods=['get', 'put', 'delete'])
   def handle_stocks(self, request):
     user = request.user
+    print(request.data)
     prof = Profile.objects.get(user=user)
     stocks = prof.stocks.all()
     if request.method == 'GET':
       if not stocks:
         return Response(status=status.HTTP_204_NO_CONTENT)
       data = [StockSerializer(s).data for s in stocks]
+      print(data)
       return Response(data=data)
     elif request.method == 'PUT':
       s = request.data.get('stock')
-      stock = Stock.objects.get(name=s)
+      stock = Stock.objects.get(abbriev=s)
       if stock in stocks:
         prof.stocks.remove(stock)
         return Response(status=status.HTTP_200_OK)
@@ -218,39 +220,6 @@ class StocksViewSet(CreateListUpdateViewSet):
   def get_abbr(self, request):
     stocks = [{"name": s.name, "abbr": s.abbriev} for s in Stock.objects.all()]
     return Response(stocks, status=status.HTTP_200_OK)
-
-  @action(detail=False, methods=['put'], permission_classes=[])
-  def searches(self, request):
-    data = request.data
-
-    stock_name = request.data['stockname']
-    search_data=str(stock_name)
-    try:
-      stock = Stock.objects.filter(name=search_data)
-      if(not stock):
-        print("Not here?")
-        stock = Stock.objects.filter(abbriev=search_data)
-        if(not stock):
-          return Response(data="Could not identfy stock",status=status.HTTP_204_NO_CONTENT)
-      tickers = [stock[0].abbriev]
-      period = data.get('period', 7)
-
-      if period == 1:
-        is_daily = True
-      else:
-        is_daily = False
-      print(tickers)
-      data = get_historical(tickers=tickers, period=period)
-      if len(tickers) == 1:
-        parsed_data = parse_stock_data(data, name=tickers[0], is_daily=is_daily)
-      else:
-        parsed_data = parse_stock_data(data, is_daily=is_daily)
-      if not parsed_data:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-      return Response(parsed_data)
-    except OperationalError:
-      return Response("Something went wrong on our end, try again later", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
   @action(detail=False ,methods=['put'], permission_classes=[])
   def query(self, request):

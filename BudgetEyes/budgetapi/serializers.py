@@ -15,7 +15,7 @@ class StockSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Stock
-    fields = '__all__'
+    fields = ['name', 'abbriev']
 
 class ExpenseSerializer(serializers.ModelSerializer):
 
