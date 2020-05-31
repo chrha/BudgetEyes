@@ -8,6 +8,8 @@ def get_historical(tickers, period=7):
   period = "{}d".format(period)
   if period == "1d":
     interval = "5m"
+  elif period == "7d":
+    interval = "1h"
   else:
     interval = "1d"
   data = download(tickers=tickers, period=period, interval=interval)
