@@ -60,22 +60,32 @@ export default {
   },
   methods: {
     SearchStock(searchStock) {
-      const sendData = { stocks: [searchStock.abbr] };
+      // const sendData = { stocks: [searchStock.abbr] }; 
+      this.$store.dispatch('requestStockData', { abbr: searchStock.abbr, period: 7 })
+        .then(() => {
+          this.search_res = this.$store.getters.getStockDataByAbbr({ abbr: searchStock.abbr, period: 'Weekly' });
+          this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, this.search_res]);
+        }).catch((error) => {
+          console.log(error);
+          this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, {}]);
+        });
+
+      /*
       axiosInstance.put('/stocks/query/', sendData)
         .then((response) => {
           this.search_res = response.data[searchStock.abbr];
-          this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, this.search_res]);
+          this.$root.$emit('msg_from_stocksearch', 
+            [searchStock.name, searchStock.abbr, this.search_res]);
         }).catch((error) => {
           // eslint-disable-next-line
           console.log(error);
         });
+        */
     },
     nameAndAbbrFilter(item, queryText) {
       const name = item.name.toLowerCase();
       const abbr = item.abbr.toLowerCase();
       const searchText = queryText.toLowerCase();
-
-
       return searchText.length > 1 && (name.indexOf(searchText) > -1
         || abbr.indexOf(searchText) > -1);
     },

@@ -2,7 +2,11 @@
 <div id="stockpage">
     <v-container id="stock-canvas">
         <v-row v-if="curr_stock">
-          <stockGraph :stockData="curr_stock_data" :stockName="curr_stock_abbr"/>
+          <stockGraph 
+          :stockData="curr_stock_data" 
+          :stockAbbr="curr_stock_abbr" 
+          :stockName="curr_stock"
+          />
         </v-row>
    </v-container>
 
@@ -36,8 +40,12 @@ export default {
   mounted() {
     this.$root.$emit('msg_from_stockcomp', this.curr_stock);
     this.$root.$on('msg_from_stocklog', (value) => {
-      const data = this.$store.getters.getStockDataByAbbr(value.abbriev);
-      if (data) {
+      console.log('logvalue:', value);
+      
+      const data = this.$store.getters.getStockDataByAbbr({ abbr: value.abbriev, period: 'Weekly' });
+      console.log(data);
+      
+      if (data && Object.keys(data).length) {
         this.curr_stock_data = data;
       } else {
         axiosInstance.put('stocks/query/', { stocks: [value.abbriev] })

@@ -18,7 +18,7 @@
     ></v-progress-linear>
     <v-row align="center justify-center">
       <v-col cols="4" v-for="(stocklist, key) in stocks" :key="key" class="m-3">
-        <StockGraph :stockData="stocklist" :isDaily="false" :stockName="key"/>
+        <StockGraph :stockData="stocklist" :isDaily="false" :stockAbbr="key"/>
       </v-col>
     </v-row>
   </v-container>
