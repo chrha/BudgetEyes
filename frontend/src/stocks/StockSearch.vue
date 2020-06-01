@@ -66,6 +66,7 @@ export default {
           this.search_res = this.$store.getters.getStockDataByAbbr({ abbr: searchStock.abbr, period: 'Weekly' });
           this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, this.search_res]);
         }).catch((error) => {
+          // eslint-disable-next-line
           console.log(error);
           this.$root.$emit('msg_from_stocksearch', [searchStock.name, searchStock.abbr, {}]);
         });

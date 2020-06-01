@@ -35,7 +35,6 @@ export default new Vuex.Store({
     async requestStockData({ commit }, payload) {
       let key;
       let periodToStore;
-      console.log(payload);
       
       if (!payload.period || payload.period === 7) periodToStore = 'Weekly';
       else if (payload.period === 30) periodToStore = 'Monthly';

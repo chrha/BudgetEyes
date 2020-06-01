@@ -135,18 +135,13 @@ export default {
         periodKey = 'Daily';
       }
 
-      console.log('Get data from store');
       
       const tmpData = this.$store.getters.getStockDataByAbbr({
         abbr: this.stockAbbr, period: periodKey, 
       });
-
-      console.log('After get data', tmpData);
-      
       
       if (period !== 1 && tmpData && Object.keys(tmpData).length) {
         this.stock = tmpData;
-        console.log('Stock:', this.stock, tmpData); 
         this.loadingMonthly = false;
         this.loadingWeekly = false;
         this.dataNotFound = false;

@@ -7,7 +7,7 @@ from django.dispatch import receiver
 # Create your models here.
 
 class Stock(models.Model):
-  name = models.CharField(max_length=30, unique=True)
+  name = models.CharField(max_length=200, unique=True)
   abbriev = models.CharField(max_length=10, unique=True, null=True)
 
 
