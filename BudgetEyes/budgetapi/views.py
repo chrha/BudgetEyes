@@ -17,31 +17,6 @@ from .viewsets import CreateListUpdateViewSet
 from .api import get_historical, parse_stock_data
 
 # Create your views here.
-"""
-
-class StockList(generics.ListCreateAPIView):
-  queryset = Stock.objects.all()
-  serializer_class = StockSerializer
-
-
-class StockDetail(generics.RetrieveUpdateDestroyAPIView):
-  queryset = Stock.objects.all()
-  serializer_class = StockSerializer
-
-
-class OwnBudget(generics.RetrieveUpdateDestroyAPIView):
-  serializer_class = BudgetSerializer
-
-  def get_queryset(self):
-    user = self.request.user
-    return Budget.objects.filter(owner=user)
-
-
-class UserDetail(generics.RetrieveUpdateAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-
-"""
 
 class UserViewSet(CreateListUpdateViewSet):
   queryset = User.objects.all()
@@ -191,17 +166,15 @@ class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
 
-  @action(detail=False, methods=['get', 'put', 'delete'])
+  @action(detail=False, methods=['get', 'put'])
   def handle_stocks(self, request):
     user = request.user
-    print(request.data)
     prof = Profile.objects.get(user=user)
     stocks = prof.stocks.all()
     if request.method == 'GET':
       if not stocks:
         return Response(status=status.HTTP_204_NO_CONTENT)
       data = [StockSerializer(s).data for s in stocks]
-      print(data)
       return Response(data=data)
     elif request.method == 'PUT':
       s = request.data.get('stock')

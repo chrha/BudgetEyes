@@ -56,14 +56,16 @@ export default {
    * for update on the displayed stock, and updates follow button.
    */
   mounted() {
-    axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
-      .then((response) => {
-        this.followed_dropdown = response.data;
-      })
-      .catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
-      });
+    if (this.$store.state.username) {
+      axiosInstance.get('stocks/handle_stocks/', { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
+        .then((response) => {
+          this.followed_dropdown = response.data;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    }
     this.$root.$on('msg_from_stockcomp', (shownStock) => {
       this.disp_stock = shownStock;
       
@@ -123,7 +125,7 @@ export default {
         } 
       });
       const data = { stock: this.disp_stock };
-      
+
       axiosInstance.put('stocks/handle_stocks/', data, { headers: { Authorization: `Token ${this.$cookies.get('token')}` } })
         .then(() => {
           if (this.followButton === 'Follow') {
@@ -139,6 +141,10 @@ export default {
           this.buttonDisabled = false;
         });
     },
+  },
+  beforeDestroy() {
+    this.$root.$off('msg_from_stocklog');
+    this.$root.$off('msg_from_stockcomp');
   },
 };
 </script>
