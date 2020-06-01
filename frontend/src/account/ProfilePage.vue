@@ -172,9 +172,9 @@ export default {
       const stock = this.followedStocks.find((elem) => elem.name === this.chosenStock);
       this.stockAbbriev = stock.abbriev;
       this.stockName = stock.name;
-      axiosInstance.put('stocks/query/', { stocks: [stock] })
+      axiosInstance.put('stocks/query/', { stocks: [stock.abbriev] })
         .then((response) => {
-          this.stockData = response.data[stock];
+          this.stockData = response.data[stock.abbriev];
         }).catch((error) => {
           // eslint-disable-next-line
           console.log(error);
