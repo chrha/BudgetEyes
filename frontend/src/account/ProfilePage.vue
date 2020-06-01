@@ -12,7 +12,7 @@
           @change="getStockData"
           > </v-select>
           <v-container v-show="chosenStock" class="mx-auto">
-            <stockGraph :stockName="stockAbbriev" :stockData="stockData"/> 
+            <stockGraph :stockAbbr="stockAbbriev" :stockData="stockData"/> 
           </v-container>
 
         </v-col>
@@ -79,12 +79,6 @@
               >
               {{profile.email}}
               </v-text-field>                                                
-              <v-text-field
-              v-model="profile.dateJoined"
-              label="Member since"
-              >
-              {{profile.dateJoined}}
-              </v-text-field>
               <v-textarea
               v-model="bio"
               label="Biography"
@@ -129,6 +123,7 @@ export default {
       editMode: false,
       chosenStock: '',
       stockAbbriev: '',
+      stockName: '',
       keys: ['Name', 'Birth Date', 'City', 'Email', 'Member since'],
       rules: [
         (value) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
@@ -174,12 +169,14 @@ export default {
       return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, '').replace(/([\da-fA-F]{2}) ?/g, '0x$1 ').replace(/ +$/, '').split(' ')));
     },
     getStockData() {
-      const stock = this.followedStocks.find((elem) => elem.name === this.chosenStock).abbriev;
-      this.stockAbbriev = stock;
+      const stock = this.followedStocks.find((elem) => elem.name === this.chosenStock);
+      this.stockAbbriev = stock.abbriev;
+      this.stockName = stock.name;
       axiosInstance.put('stocks/query/', { stocks: [stock] })
         .then((response) => {
           this.stockData = response.data[stock];
         }).catch((error) => {
+          // eslint-disable-next-line
           console.log(error);
         });
     },
