@@ -1,14 +1,14 @@
 <template>
-  <div class="budgetpage">
-    <div class="row">
-      <div class="calc">
+  <v-container class="budgetpage">
+    <v-row class="row">
+      <v-col class="calc">
         <BudgetCalc/>
-        </div>
-      <div class="inf">
+      </v-col>
+      <v-col class="inf">
         <BudgetInfo/>
-      </div>
-    </div>
-  </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -34,6 +34,7 @@ export default {
 .inf {
   background-color: transparent;
   float: left;
+  width: 100%;
   margin-right: auto;}
 
 </style>

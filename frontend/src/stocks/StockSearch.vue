@@ -1,9 +1,10 @@
 <template>
-<div id="stock-search">
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-autocomplete
+<div class="center">
+    <v-container class="cont">
+      <v-row  class="ro">
+        <v-col  cols="9" class="co">
+          <v-autocomplete id="search-bar"
+            full-width
             v-model="searchStock"
             :items="stockNameList"
             @keyup.enter="SearchStock(searchStock)"
@@ -21,8 +22,8 @@
             return-object
           ></v-autocomplete>
         </v-col>
-        <v-col>
-           <v-btn id= "stockSearchButton" @click="SearchStock(searchStock)">Search</v-btn>
+        <v-col class="bu">
+              <v-btn id= "stockSearchButton" @click="SearchStock(searchStock)">Search</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -84,10 +85,22 @@ export default {
 
 
 <style scoped>
-    #stockSearchButton{
-      float: left;
-      background-color: #C7F0DB;
-      color: #000000;
-    }
-    
+  #search-bar{
+    float: right;
+  }
+  .center {
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+  }
+  .bu{
+    padding: 40px;
+  }
+  #stockSearchButton{
+    background-color: #C7F0DB;
+    color: #000000;
+    position: absolute;
+    left: 0;
+  }
+
 </style>

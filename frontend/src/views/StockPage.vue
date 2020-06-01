@@ -9,7 +9,7 @@
         <StockLog v-show="this.$store.state.username"/>
       </v-col>
       <v-col class="inf">
-          <StockInfo/>
+        <StockInfo/>
       </v-col>
     </v-row>
   </v-container>
@@ -51,7 +51,7 @@ export default {
   .inf{
 
      float: left;
-     margin: auto;
+     margin-right: auto;;
   }
 
 </style>

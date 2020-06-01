@@ -2,7 +2,7 @@
 <template>
   <div class="block">
     <div class="center">
-      <h4 class="text-right"> {{ intro }} </h4>
+      <h4 class="text-left"> {{ intro }} </h4>
 
       <v-text-field
         label ="Income"
@@ -324,7 +324,7 @@ export default {
 </script>
 
 <style scoped>
-.text-right{
+.text-left{
   margin-top:30px;
 }
 .head{
