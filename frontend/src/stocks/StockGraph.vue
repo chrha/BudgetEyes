@@ -1,12 +1,13 @@
 <template>
-  <v-card class="deep-purple darken-1" max-width="450">
-    <v-card-title class="headline"> 
-      {{ stockName }} 
+  <v-card class="chart"
+   color="deep-purple lighten-1">
+    <v-card-title class="headline">
+      {{ stockName }}
       <v-spacer> </v-spacer>
       <v-btn-toggle
       v-model="period"
-      background-color="deep-purple accent-3"
-      color="white"
+      background-color="deep-purple lighten-2"
+      color="black"
       group
       mandatory
       @change="periodChange"
@@ -30,7 +31,7 @@
         deletable-chips
         color="white"
         item-color="black"
-        background-color="deep-purple darken-1"
+        background-color="deep-purple lighten-2"
         @change="updateChartData()"
         >
         </v-select>
@@ -43,7 +44,7 @@
     />
   <v-card-text v-show="dataNotFound" class="error"> This data is not available! </v-card-text>
   </v-card>
-  
+
 </template>
 
 <script>
@@ -85,7 +86,6 @@ export default {
       model: ['Close'],
       chartOptions: {
         backgroundColor: '#BBDEFB',
-        width: 450,
         vAxis: {
           title: 'Price (USD)',
           gridlines: {
@@ -111,7 +111,7 @@ export default {
       for (let i = 0; i < this.stock.Close.length; i += 1) {
         const tmparr = [];
         tmparr.push(this.stock.Dates[i]);
-        for (let j = 0; j < this.model.length; j += 1) { 
+        for (let j = 0; j < this.model.length; j += 1) {
           tmparr.push(this.stock[this.model[j]][i]);
         }
         this.chartData.push(tmparr);
@@ -119,7 +119,6 @@ export default {
     },
     periodChange() {
       const period = Number(this.period);
-      this.loading = true;
       if (period === 7) {
         this.loadingWeekly = true;
       } else if (period === 30) {
@@ -141,7 +140,7 @@ export default {
           this.loadingWeekly = false;
           this.loadingDaily = false;
         });
-    },  
+    },
   },
   mounted() {
     this.updateChartData();
@@ -151,5 +150,7 @@ export default {
 
 
 <style scoped>
-
+  .chart{
+    width: 100%
+  }
 </style>

@@ -1,12 +1,11 @@
 <template>
 <div id="stockpage">
     <v-container id="stock-canvas">
-
         <v-row v-if="curr_stock">
           <stockGraph :stockData="curr_stock_data" :stockName="curr_stock_abbr"/>
         </v-row>
    </v-container>
-    
+
 </div>
 </template>
 
@@ -27,7 +26,7 @@ export default {
       curr_stock: '',
       curr_stock_data: {},
       curr_stock_abbr: '',
-      
+
     };
   },
   /**
@@ -90,17 +89,17 @@ export default {
 };
 </script>
 
- 
+
 <style scoped>
     #previousButton{
         background-color: #C7F0DB;
         color: #000000;
-        
+
     }
     #nextButton{
         background-color: #C7F0DB;
         color: #000000;
-        
+
     }
-  
+
 </style>

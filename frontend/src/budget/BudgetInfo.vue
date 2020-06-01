@@ -1,13 +1,12 @@
 
 <template>
-  <div class="column">
+  <div class="center">
     <v-card class="wise-words"
-      width="600px"
       color="#effcef">
-      <v-card-title>
+      <v-card-title class="justify-center" style="font-size: 2.0em">
         Don't neglect your budget!
       </v-card-title>
-      <v-card-text>
+      <v-card-text style="font-size: 1.3em">
         Budgeting is important
         because it helps you accurately plan,
         control and track how much money you spend, save, give and invest.
@@ -16,7 +15,7 @@
         steer clear of debt, and maintain focus on your long-term goals
       </v-card-text>
 
-      <v-card-text>
+      <v-card-text style="font-size: 1.3em">
         This calculator uses the 50/30/20 budgeting method which
         divides your monthly expenses into needs , wants and savings.
         50% of your income should be allocated towards needs, 30% to wants
@@ -40,19 +39,15 @@ export default {
  <style scoped>
 
 .center {
+  margin: auto;
   width: 100%;
   padding: 10px;
   overflow: hidden;
   text-overflow:ellipsis;
 }
 .wise-words{
-  font-size: 18px;
   text-align: left;
   margin-top:50px;
-}
-
-.column{
-  background-color: transparent;
 }
 
 </style>

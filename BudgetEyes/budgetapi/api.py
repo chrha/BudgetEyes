@@ -30,7 +30,7 @@ def parse_stock_data(data, name='', is_daily=False):
         if not out[stock].get('Dates'):
           dates = list(data[col][stock].index.to_pydatetime())
           if is_daily:
-            dates = [date.strftime("%H:%M") for date in dates]
+            dates = [date.astimezone().strftime("%H:%M") for date in dates]
           else:
             dates = [date.strftime("%m/%d") for date in dates]
 
@@ -49,7 +49,7 @@ def parse_stock_data(data, name='', is_daily=False):
       if not out[name].get('Dates'):
         dates = list(data[col].index.to_pydatetime())
         if is_daily:
-          dates = [date.strftime("%H:%M") for date in dates]
+          dates = [date.astimezone().strftime("%H:%M") for date in dates]
         else:
           dates = [date.strftime("%m/%d") for date in dates]
         out[name]['Dates'] = dates
