@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid id="container"> 
+  <v-container fluid id="container">
     <div v-if="this.$store.state.username">
       <h3> Hey {{ $store.state.username }}! {{ welcomeMsg }}  </h3>
     </div>
@@ -16,9 +16,10 @@
       rounded
       height="6"
     ></v-progress-linear>
-    <v-row v-for="(stocklist, key) in stocks" :key="key" class="m-3" 
-      style="float:left">
-      <StockGraph :stockData="stocklist" :isDaily="false" :stockName="key"/>
+    <v-row align="center justify-center">
+      <v-col cols="4" v-for="(stocklist, key) in stocks" :key="key" class="m-3">
+        <StockGraph :stockData="stocklist" :isDaily="false" :stockName="key"/>
+      </v-col>
     </v-row>
   </v-container>
 
@@ -66,7 +67,7 @@ export default {
         });
     } else {
       axiosInstance.put('stocks/query/', { stocks: ['MSFT', 'GOOG', 'AAPL', 'KO', 'AMZN', 'FB'], period: 7 })
-        .then((response) => { 
+        .then((response) => {
           this.loading = false;
           this.stocks = Object.assign(response.data, this.stocks);
         }).catch((error) => {
