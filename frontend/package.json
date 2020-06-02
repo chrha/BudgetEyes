@@ -1,10 +1,6 @@
 {
-  "name": "budgeteyes",
-<<<<<<< HEAD
-  "version": "1.0.0",
-=======
+  "name": "budgetyes",
   "version": "0.1.0",
->>>>>>> 98a2c74eea413d22b49f36255f4431dfd284f96b
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

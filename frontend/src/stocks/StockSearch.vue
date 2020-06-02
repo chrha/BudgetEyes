@@ -96,16 +96,6 @@ export default {
 
 
 <style scoped>
-<<<<<<< HEAD
-.stockPageButton{
-    background-color: #C7F0DB;
-    color: #000000;
-    
-}
-.searchbar {
-    background-color: white;
-}
-=======
   #search-bar{
     float: right;
   }
@@ -123,6 +113,5 @@ export default {
     position: absolute;
     left: 0;
   }
->>>>>>> development
 
 </style>
