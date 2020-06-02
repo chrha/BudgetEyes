@@ -2,8 +2,8 @@
     <div id="stock-log">
         <v-container id="log-container">
             <v-row class="mb-5">
-                <v-col>
-                  <v-btn id= "followButton" 
+                <v-col class="justify-center">
+                  <v-btn v-show="disp_stock" id= "followButton" 
                   v-on:click="onFollow()"
                   :disabled="buttonDisabled"
                   absolute
