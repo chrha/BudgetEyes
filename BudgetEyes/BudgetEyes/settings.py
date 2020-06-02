@@ -27,7 +27,7 @@ SECRET_KEY = 'q)=ad52g!w)d7$q22tm*c!8#nptmq%b+x!kz$zkk$=8cz_4m!h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-USE_POSTGRES_DB = False
+USE_POSTGRES_DB = True
 
 ALLOWED_HOSTS = []
 

@@ -17,6 +17,7 @@ def get_historical(tickers, period=7):
 
 
 def parse_stock_data(data, name='', is_daily=False):
+  print(data)
   if not isinstance(data.Close, Series):
     stocks = list(data.Close.columns)
     out = {s: {} for s in stocks}
@@ -33,13 +34,13 @@ def parse_stock_data(data, name='', is_daily=False):
             dates = [date.astimezone().strftime("%H:%M") for date in dates]
           else:
             dates = [date.strftime("%m/%d") for date in dates]
-
           out[stock]['Dates'] = dates
+          ind = np.where(np.isnan(data[col][stock]))[0]
+          for i in ind[::-1]:
+            print(stock)
+            out[stock]['Dates'].pop(i)
 
-        ind = np.where(np.isnan(data[col][stock]))[0]
         values = list(data[col][stock].dropna())
-        for i in ind[::-1]:
-          out[stock]['Dates'].pop(i)
         out[stock][col] = values
 
     else:
@@ -53,11 +54,11 @@ def parse_stock_data(data, name='', is_daily=False):
         else:
           dates = [date.strftime("%m/%d") for date in dates]
         out[name]['Dates'] = dates
+        ind = np.where(np.isnan(data[col]))[0]
+        for i in ind[::-1]:
+          del dates[i]
 
-      ind = np.where(np.isnan(data[col]))[0]
-      for i in ind[::-1]:
-        del dates[i]
-      values = list(data[col])
+      values = list(data[col].dropna())
       out[stocks][col] = values
 
   return out

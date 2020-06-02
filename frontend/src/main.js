@@ -19,7 +19,6 @@ Vue.use(VueCookies);
 Vue.use(VueGoogleCharts);
 Vue.$cookies.config('1d');
 
-// Vue.use(VueAxios, axios);
 
 Sentry.init({
   dsn: 'https://b0ffa0f2093349d2bcdb5dd1d8115cc5@o321568.ingest.sentry.io/5203638',

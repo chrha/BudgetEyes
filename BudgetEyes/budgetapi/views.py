@@ -166,28 +166,6 @@ class StocksViewSet(CreateListUpdateViewSet):
   queryset = Stock.objects.all()
   serializer_class = StockSerializer
 
-  @action(detail=False, methods=['get', 'put'])
-  def handle_stocks(self, request):
-    user = request.user
-    prof = Profile.objects.get(user=user)
-    stocks = prof.stocks.all()
-    if request.method == 'GET':
-      if not stocks:
-        return Response(status=status.HTTP_204_NO_CONTENT)
-      data = [StockSerializer(s).data for s in stocks]
-      return Response(data=data)
-    elif request.method == 'PUT':
-      s = request.data.get('stock')
-      stock = Stock.objects.get(abbriev=s)
-      if stock in stocks:
-        prof.stocks.remove(stock)
-        return Response(status=status.HTTP_200_OK)
-      else:
-        prof.stocks.add(stock)
-        return Response(status=status.HTTP_200_OK)
-
-
-
 
   @action(detail=False, methods=['get'], permission_classes=[])
   def get_abbr(self, request):
@@ -223,3 +201,24 @@ class StocksViewSet(CreateListUpdateViewSet):
     if not parsed_data:
       return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(parsed_data)
+
+
+  @action(detail=False, methods=['get', 'put'])
+  def handle_stocks(self, request):
+    user = request.user
+    prof = Profile.objects.get(user=user)
+    stocks = prof.stocks.all()
+    if request.method == 'GET':
+      if not stocks:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+      data = [StockSerializer(s).data for s in stocks]
+      return Response(data=data)
+    elif request.method == 'PUT':
+      s = request.data.get('stock')
+      stock = Stock.objects.get(abbriev=s)
+      if stock in stocks:
+        prof.stocks.remove(stock)
+        return Response(status=status.HTTP_200_OK)
+      else:
+        prof.stocks.add(stock)
+        return Response(status=status.HTTP_200_OK)

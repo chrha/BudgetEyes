@@ -2,6 +2,16 @@
 
 # [Link to mid course screencast](https://youtu.be/nrZc5Tm-Kvg) 
 
+# [Link to Project Screencast 06/02] (https://www.youtube.com/watch?v=gxZi5-Kc6ic)
+
+## Individual screencasts:
+
+### [Viktor Blidh](https://youtu.be/DZAeoaPYg4I)
+### [Ilian Ayoub]()
+### [Chris Habib]()
+
+
+# Specifications
 
 ## Functional specification
 The vision with this project is to design a website for personal finance and budgeting.
