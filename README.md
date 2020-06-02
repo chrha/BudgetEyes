@@ -2,12 +2,12 @@
 
 # [Link to mid course screencast](https://youtu.be/nrZc5Tm-Kvg) 
 
-# [Link to Project Screencast 06/02] (https://www.youtube.com/watch?v=gxZi5-Kc6ic)
+# [Link to Project Screencast 06/02](https://www.youtube.com/watch?v=gxZi5-Kc6ic)
 
 ## Individual screencasts:
 
 ### [Viktor Blidh](https://youtu.be/DZAeoaPYg4I)
-### [Ilian Ayoub]()
+### [Ilian Ayoub](https://youtu.be/C5cjWka9uQg)
 ### [Chris Habib]()
 
 
