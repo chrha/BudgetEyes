@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Nav/>
+    <v-app id="v-app">
     <router-view/>
+    </v-app>
   </div>
 </template>
 
@@ -13,6 +15,11 @@ export default {
   components: {
     Nav: NavBar,
   },
+  mounted() {
+    if (this.$cookies.isKey('username')) {
+      this.$store.commit('setUsername', this.$cookies.get('username'));
+    }
+  },
 };
 </script>
 
@@ -21,13 +28,9 @@ export default {
 html {
   height: 100%;
 }
-
-body {
-  background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac, #655c56);
+#v-app {
+  background: linear-gradient(to bottom right, #effcef, #ccedd2, #94d3ac);
   min-height: 100%;
-}
-
-#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

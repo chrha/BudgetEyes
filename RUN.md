@@ -1,6 +1,6 @@
 # How to setup the app:
 
-## Install python 3.8
+## Install python >3.6
 ## Install nodejs@latest
 
 ## Install pipenv:
@@ -13,6 +13,14 @@
 > `pipenv install --dev`
 > `cd frontend`
 > `npm install`
+
+## Add stocks to database:
+
+> `cd Budgeteyes/scripts`
+> `python stock_to_json.py`
+> `cd ..`
+> `./manage.py loaddata stocks.json`
+ 
 
 # How to run the app:
 

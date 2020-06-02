@@ -1,76 +1,66 @@
 <template>
   <div>
   <h2 class="register"> Create account </h2>
-  <b-form @submit.prevent="Register">
-    <b-form-group class=reg-grp> 
-      <b-form-input
-        id="fname"
-        label="Firstname"
-        v-model="form.first_name"
-        required
-        placeholder="Enter your firstname"   
+  <v-card class="mx-auto deep-purple lighten-4" max-width="500">
+    <v-form ref="form">
+      <v-text-field
+      v-model="form.first_name"
+      label="First name (optional)"
+      :filled="true"
+      :clearable="true"
+      @keyup.enter="Register"
       >
-      </b-form-input>
-      <b-form-input
-        id="lname"
-        label="Lastname"
-        v-model="form.last_name"
-        required
-        placeholder="Enter your lastname" 
+      </v-text-field>
+      <v-text-field
+      v-model="form.last_name"
+      label="Last name (optional)"
+      :clearable="true"
+      :filled="true"
+      @keyup.enter="Register"
       >
-      </b-form-input>
-      <b-form-input
-        id="uname"
-        label="Username"
-        v-model="form.username"
-        required
-        placeholder="Enter your username"
-        autocomplete="username"
+      </v-text-field>
+      <v-text-field
+      v-model="form.username"
+      label="Username"
+      :clearable="true"
+      :filled="true"
+      :rules="usernameRules"
+      @keyup.enter="Register"
+      @input="usernameAvailable = true"
       >
-      </b-form-input>
-      <b-form-input
-        id="email"
-        label="Email"
-        v-model="form.email"
-        type="email"
-        required
-        placeholder="Enter your email address"   
+      </v-text-field>
+      <v-text-field
+      v-model="form.email"
+      label="Email"
+      :filled="true"
+      :clearable="true"
+      :rules="emailRules"
+      @keyup.enter="Register"
       >
-      </b-form-input>
-      <b-form-input
-        id="pword"
-        label="Password"
-        v-model="form.password"
-        type="password"
-        required
-        placeholder="Enter your password"
-        autocomplete="new-password"
+      </v-text-field>
+      <v-text-field
+      v-model="form.password"
+      label="Enter password"
+      type="password"
+      :filled="true"
+      :clearable="true"
+      :rules="passwordRules"
+      @keyup.enter="Register"
       >
-      </b-form-input>
-      <b-form-input
-        id="re-pword"
-        label="Re-enter Password"
-        v-model="form.rePassword"
-        type="password"
-        required
-        placeholder="Enter your password again"
-        autocomplete="new-password"
+      </v-text-field>
+      <v-text-field
+      v-model="form.rePassword"
+      label="Enter password again"
+      type="password"
+      :filled="true"
+      :clearable="true"
+      :rules="rePasswordRules"
+      @keyup.enter="Register"
       >
-      </b-form-input>
-      <b-button class=submitbutton type="submit"> Register </b-button>
-    </b-form-group>
-  </b-form>
-    <p v-if="errors.length === 1">
-        <ul>
-          <p class=error-item> {{errors[0]}} </p>
-        </ul>
-    </p>
-    <p v-else-if="errors.length">
-      <b>Please correct the following errors:</b>
-      <ul>
-        <li v-for="error in errors" :key="error"><strong> {{ error }} </strong></li>
-      </ul>
-    </p>
+      </v-text-field>
+      <v-btn class="mt-2 gray darken-3" width="400" @click="Register"> Register </v-btn>
+    </v-form>
+  </v-card>
   </div>
 </template>
 
@@ -82,7 +72,6 @@ export default {
   name: 'Register',
   data() {
     return {
-      errors: [],
       form: {
         first_name: '',
         last_name: '',
@@ -91,18 +80,36 @@ export default {
         password: '',
         rePassword: '',
       },
+      usernameAvailable: true,
+      usernameRules: [
+        (v) => !!v || 'Username is required',
+        () => !!this.usernameAvailable || 'That username is already taken!',
+      ],
+      emailRules: [
+        (v) => !!v || 'Email is required',
+        (v) => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid',
+      ],
+      passwordRules: [
+        (v) => !!v || 'Password is required',
+        (v) => !v || /^(?=.*\d).{8,16}$/.test(v) || 'Password must be between 8 and 16 characters long and contain at least one digit',
+      ],
+      rePasswordRules: [
+        (v) => !!v || 'You must enter password twice',
+        () => (this.form.rePassword === this.form.password) || 'Passwords must match', 
+        (v) => !v || /^(?=.*\d).{8,16}$/.test(v) || 'Password must be between 8 and 16 characters long and contain at least one digit',
+      ],
     };
   },
   methods: {
     Register() {
-      if (this.form.password !== this.form.rePassword) {
-        if (!this.errors.length) this.errors.push('Passwords must match');
-      } else {
+      if (this.$refs.form.validate()) {
         axiosInstance.put('auth/register/', this.form).then(() => { 
           this.$router.push({ name: 'Login', params: { msg: 'User created!' } });
-        }).catch((response) => {
-          // eslint-disable-next-line 
-          console.log(response);
+        }).catch((error) => {
+          if (error.response.status === 400) {
+            this.usernameAvailable = false;
+            this.$refs.form.validate();
+          }
         });
       }
     },

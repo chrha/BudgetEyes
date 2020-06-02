@@ -1,24 +1,18 @@
+
+
 <template>
-  <div class="stockpage">
-    <b-container>
-      <b-row>
-        <b-col>
-          <StockComponent/>
-        </b-col>
-        <b-col>
-          <StockSearch/>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="7">
-         
-        </b-col>
-        <b-col >
-           <StockLog/>
-        </b-col>   
-      </b-row>
-    </b-container>
-  </div>
+  <v-container fluid class="budgetpage">
+    <v-row class="row">
+      <v-col class="graph">
+        <StockSearch/>
+        <StockComponent/>
+        <StockLog v-show="this.$store.state.username"/>
+      </v-col>
+      <v-col class="inf">
+        <StockInfo/>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -26,6 +20,7 @@
 import StockComponent from '@/stocks/StockComponent.vue';
 import StockSearch from '@/stocks/StockSearch.vue';
 import StockLog from '@/stocks/StockLog.vue';
+import StockInfo from '@/stocks/StockInfo.vue';
 
 export default {
   name: 'StockPage',
@@ -33,6 +28,30 @@ export default {
     StockComponent,
     StockSearch,
     StockLog,
+    StockInfo,
+  },
+  data() {
+    return {
+    };
+  },
+  theme: {
+    options: {
+      customProperties: true,
+    },
   },
 };
 </script>
+
+<style scoped>
+  .graph{
+
+     float: left;
+     margin: auto;
+  }
+  .inf{
+
+     float: left;
+     margin-right: auto;;
+  }
+
+</style>

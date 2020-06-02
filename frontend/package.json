@@ -1,6 +1,10 @@
 {
-  "name": "frontend",
+  "name": "budgeteyes",
+<<<<<<< HEAD
+  "version": "1.0.0",
+=======
   "version": "0.1.0",
+>>>>>>> 98a2c74eea413d22b49f36255f4431dfd284f96b
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,12 +12,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@sentry/browser": "^5.15.5",
+    "@sentry/integrations": "^5.15.5",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.12.0",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
+    "vue-cookies": "^1.7.0",
+    "vue-google-charts": "^0.3.2",
     "vue-router": "^3.1.6",
     "vuetify": "^2.2.26",
     "vuex": "^3.1.3"

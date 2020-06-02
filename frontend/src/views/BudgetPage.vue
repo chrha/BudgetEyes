@@ -1,14 +1,14 @@
 <template>
-  <div class="budgetpage">
-    <div class="row">
-      <div class="column">
+  <v-container class="budgetpage">
+    <v-row class="row">
+      <v-col class="calc">
         <BudgetCalc/>
-        </div>
-      <div class="column">
+      </v-col>
+      <v-col class="inf">
         <BudgetInfo/>
-      </div>
-    </div>
-  </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -27,15 +27,14 @@ export default {
 </script>
  <style scoped>
 
- .column {
+ .calc {
   float: left;
   margin: auto;
 }
-.center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
-}
+.inf {
+  background-color: transparent;
+  float: left;
+  width: 100%;
+  margin-right: auto;}
 
 </style>
