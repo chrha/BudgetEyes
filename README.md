@@ -8,7 +8,7 @@
 
 ### [Viktor Blidh](https://youtu.be/DZAeoaPYg4I)
 ### [Ilian Ayoub](https://youtu.be/C5cjWka9uQg)
-### [Chris Habib]()
+### [Chris Habib](https://youtu.be/B4exMLWmP6E)
 
 
 # Specifications
